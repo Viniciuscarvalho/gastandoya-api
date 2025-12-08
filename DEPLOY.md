@@ -43,9 +43,12 @@ vercel --prod
 3. Selecione o repositório `gastandoya-api`
 4. Configure conforme abaixo:
    - **Framework Preset**: Next.js
+   - **Root Directory**: `./` (deixe vazio, usa a raiz do projeto)
    - **Build Command**: `npm run build` (padrão)
    - **Output Directory**: `.next` (padrão)
    - **Install Command**: `npm install` (padrão)
+
+> 💡 **Importante**: O diretório raiz é `./` (raiz do repositório). Não configure subpastas.
 
 ### 3. Configurar Variáveis de Ambiente
 
