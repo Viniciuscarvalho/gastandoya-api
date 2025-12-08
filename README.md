@@ -108,6 +108,8 @@ Após autorizar no Notion, você verá a página de sucesso.
 ```
 gastandoya-api/
 ├── app/
+│   ├── layout.tsx                   # ✅ Root layout (obrigatório Next.js)
+│   ├── page.tsx                     # ✅ Home page da API
 │   ├── api/
 │   │   └── notion/
 │   │       ├── expenses/
@@ -125,9 +127,11 @@ gastandoya-api/
 ├── lib/
 │   ├── types.ts                     # ✅ Interfaces TypeScript
 │   ├── config.ts                    # ✅ Configuração e validação de env vars
-│   ├── userNotionConnectionStore.ts # ✅ Storage de conexões (in-memory)
-│   ├── notionClient.ts              # TODO: Tarefa 2.0
-│   └── notionExpensesService.ts     # TODO: Tarefa 2.0
+│   ├── userNotionConnectionStore.ts # ✅ Factory (escolhe storage)
+│   ├── userNotionConnectionStore.kv.ts # ✅ Implementação Vercel KV
+│   ├── userNotionConnectionStore.memory.ts # ✅ Implementação in-memory
+│   ├── notionClient.ts              # ✅ Client do Notion
+│   └── notionExpensesService.ts     # ✅ Serviço de despesas
 ├── tasks/
 │   └── prd-notion-expenses/         # Documentação completa
 │       ├── prd.md                   # Product Requirements Document
