@@ -11,7 +11,6 @@ export function createNotionClient(accessToken: string): Client {
   return new Client({
     auth: accessToken,
     notionVersion: config.notion.apiVersion,
-    logLevel: process.env.NODE_ENV === 'development' ? 'warn' : 'error',
   })
 }
 
