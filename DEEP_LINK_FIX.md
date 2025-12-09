@@ -51,6 +51,26 @@ Criar uma **página intermediária** que usa JavaScript no lado do cliente para 
 ✅ Mostra countdown de 3 segundos  
 ✅ Oferece botão manual caso não abra automaticamente  
 ✅ UI amigável com feedback visual  
+✅ Wrapped em `<Suspense>` (requisito do Next.js 13+ para `useSearchParams`)
+
+**Estrutura do componente:**
+
+```typescript
+// NotionRedirectContent: Componente interno que usa useSearchParams
+function NotionRedirectContent() {
+  const searchParams = useSearchParams()
+  // ... lógica de redirecionamento
+}
+
+// NotionRedirectPage: Componente exportado com Suspense boundary
+export default function NotionRedirectPage() {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <NotionRedirectContent />
+    </Suspense>
+  )
+}
+```  
 
 **Parâmetros de entrada:**
 
@@ -289,6 +309,40 @@ func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>)
 - Verificar se `useEffect` está sendo chamado
 - Abrir Safari Developer Tools para ver erros
 
+### Problema 5: Erro "missing-suspense-with-csr-bailout"
+
+**Causa:** Next.js 13+ requer que `useSearchParams()` esteja dentro de um Suspense boundary.
+
+**Erro:**
+```
+useSearchParams() should be wrapped in a suspense boundary at page "/notion/redirect"
+```
+
+**Solução:**
+✅ **Já implementado!** O componente está estruturado assim:
+
+```typescript
+// Componente interno com useSearchParams
+function NotionRedirectContent() {
+  const searchParams = useSearchParams()
+  // ...
+}
+
+// Componente exportado com Suspense
+export default function NotionRedirectPage() {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <NotionRedirectContent />
+    </Suspense>
+  )
+}
+```
+
+Se o erro persistir:
+1. Verificar se `Suspense` está importado: `import { Suspense } from 'react'`
+2. Limpar cache do Next.js: `rm -rf .next`
+3. Rebuild: `npm run build`
+
 ## 📱 O que o iOS Precisa Fazer
 
 **Nada mudou!** O handler continua o mesmo:
@@ -349,3 +403,4 @@ Pronto para sincronizar despesas! 🚀
 ---
 
 **Esta solução resolve o problema de forma elegante e respeitando as restrições de segurança do Safari iOS!** 🎉
+

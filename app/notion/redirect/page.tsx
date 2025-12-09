@@ -1,9 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 
-export default function NotionRedirectPage() {
+function NotionRedirectContent() {
   const searchParams = useSearchParams()
   const [countdown, setCountdown] = useState(3)
   const [error, setError] = useState<string | null>(null)
@@ -204,4 +204,45 @@ export default function NotionRedirectPage() {
     </div>
   )
 }
+
+export default function NotionRedirectPage() {
+  return (
+    <Suspense fallback={
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
+        fontFamily: 'system-ui, -apple-system, sans-serif',
+      }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+          color: '#6B7280',
+        }}>
+          <div style={{
+            width: '24px',
+            height: '24px',
+            border: '3px solid #E5E7EB',
+            borderTopColor: '#3B82F6',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+          }} />
+          <span>Carregando...</span>
+        </div>
+        <style jsx>{`
+          @keyframes spin {
+            to {
+              transform: rotate(360deg);
+            }
+          }
+        `}</style>
+      </div>
+    }>
+      <NotionRedirectContent />
+    </Suspense>
+  )
+}
+
 
