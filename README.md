@@ -91,7 +91,8 @@ A API estará disponível em `http://localhost:3000`.
 3. **Usuário** concede permissão ao GastandoYa
 4. **Notion** redireciona de volta para: `/api/notion/oauth/callback?code=...&state=...`
 5. **Backend** troca o `code` por `access_token` e salva no `UserNotionConnectionStore`
-6. **Usuário** vê página de sucesso e pode voltar ao app
+6. **Backend** redireciona para deep link: `gastandoya://notion/callback?success=true&userId=...`
+7. **App iOS** abre automaticamente e processa o callback
 
 ### Testando o OAuth Manualmente
 
@@ -101,7 +102,9 @@ Abra no navegador:
 http://localhost:3000/api/notion/oauth/authorize?userId=test-user-1
 ```
 
-Após autorizar no Notion, você verá a página de sucesso.
+Após autorizar no Notion, você será redirecionado para `gastandoya://notion/callback?success=true&userId=test-user-1`
+
+> 💡 **Nota**: No navegador, verá "Safari cannot open the page" se o app iOS não estiver instalado. Isso é esperado!
 
 ## 📁 Estrutura do Projeto
 
@@ -158,6 +161,46 @@ Consulte a pasta `tasks/prd-notion-expenses/` para:
 - [x] **Tarefa 3.0**: Rota `GET /api/notion/expenses`
 - [x] **Tarefa 4.0**: Testes unitários e configuração de testes
 - [x] **Tarefa 5.0**: Documentação de deploy na Vercel
+- [x] **Deep Link iOS**: Redirecionamento automático após OAuth (`gastandoya://`)
+
+## 📱 Integração com App iOS
+
+### Deep Link Callback
+
+Após o OAuth, o backend redireciona automaticamente para o app via deep link:
+
+**Sucesso:**
+```
+gastandoya://notion/callback?success=true&userId={uuid}
+```
+
+**Erro:**
+```
+gastandoya://notion/callback?error={errorMessage}
+```
+
+### Guias de Implementação
+
+- **`IOS_INTEGRATION_GUIDE.md`**: Código completo Swift para integração
+- **`IOS_DEEPLINK_SETUP.md`**: Configuração de deep links no Xcode
+
+### Exemplo Rápido (Swift)
+
+```swift
+// 1. Gerar userId persistente
+let userId = UserIDManager.shared.getUserId()
+
+// 2. Abrir OAuth
+let url = "https://api.gastandoya.com.br/api/notion/oauth/authorize?userId=\(userId)"
+let safariVC = SFSafariViewController(url: URL(string: url)!)
+present(safariVC, animated: true)
+
+// 3. Configurar handler de deep link
+func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+    guard let url = URLContexts.first?.url else { return }
+    // Processar gastandoya://notion/callback?success=true
+}
+```
 
 ## 🚢 Deploy
 
