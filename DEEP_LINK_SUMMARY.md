@@ -250,3 +250,4 @@ Após implementação completa:
 - 🖥️ Backend: `README.md`
 - 🏗️ Arquitetura: `ARCHITECTURE.md`
 
+
