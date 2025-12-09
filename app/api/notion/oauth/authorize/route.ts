@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { config, generateOAuthState } from '@/lib/config'
 
+// Força renderização dinâmica (necessário para searchParams)
+export const dynamic = 'force-dynamic'
+
 /**
  * GET /api/notion/oauth/authorize
  * 
