@@ -156,6 +156,12 @@ export function getUserNotionConnectionStore(): UserNotionConnectionStore {
       }
     }
   }
+  
+  // TypeScript: garantir que storeInstance não é null
+  if (!storeInstance) {
+    throw new Error('Failed to initialize UserNotionConnectionStore')
+  }
+  
   return storeInstance
 }
 
