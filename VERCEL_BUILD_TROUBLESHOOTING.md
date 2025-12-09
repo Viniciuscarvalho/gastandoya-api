@@ -316,3 +316,4 @@ Se o problema persistir:
 Arquivos obrigatórios (`app/layout.tsx` e `app/page.tsx`) criados.  
 Build deve funcionar normalmente agora.
 
+

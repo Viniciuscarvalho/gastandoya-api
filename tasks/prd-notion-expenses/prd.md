@@ -97,3 +97,4 @@ O backend será um serviço Next.js exposto via `GET /api/notion/expenses`, que 
 - Eventual suporte a múltiplas moedas por usuário (por enquanto, `currency` será fixo em `"BRL"`).
 - Decisão de armazenamento para tokens (ex.: Postgres via Prisma, KV, outro banco) e requisitos específicos de criptografia além do padrão da infra.
 
+

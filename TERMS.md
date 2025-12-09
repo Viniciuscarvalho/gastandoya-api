@@ -308,3 +308,4 @@ Versão 1.0 | Dezembro 2025
 
 © 2025 GastandoYa. Todos os direitos reservados.
 
+

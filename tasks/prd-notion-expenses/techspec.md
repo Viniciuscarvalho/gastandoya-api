@@ -226,3 +226,4 @@ Database de despesas no Notion deve conter ao menos:
   - `lib/notionExpensesService.ts`
   - `lib/userNotionConnectionStore.ts`
 
+

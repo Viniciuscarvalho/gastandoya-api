@@ -328,3 +328,4 @@ Deploy novamente. **Atenção:** Dados serão perdidos!
 
 Dúvidas? Consulte a [documentação oficial da Vercel KV](https://vercel.com/docs/storage/vercel-kv).
 
+

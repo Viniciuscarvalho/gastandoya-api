@@ -218,3 +218,4 @@ Depois de validar o fluxo manualmente:
 2. Configurar deploy na Vercel (Tarefa 5.0)
 3. Integrar com o app iOS usando esses endpoints
 
+
