@@ -72,3 +72,4 @@ Criar um serviço centralizado para integração com a Notion API que, dado um `
 - (a serem criados) `lib/notionExpensesService.ts`
 
 
+

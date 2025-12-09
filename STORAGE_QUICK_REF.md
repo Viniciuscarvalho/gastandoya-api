@@ -160,3 +160,4 @@ vercel env ls
 
 **💡 Dica:** O sistema funciona sem Vercel KV (fallback para in-memory), mas para produção, **sempre configure o KV** para persistência de dados!
 
+

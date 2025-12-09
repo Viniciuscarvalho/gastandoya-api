@@ -27,8 +27,8 @@ API backend para o app iOS GastandoYa, com integração ao Notion para leitura d
      - ✓ Read content
      - ✓ No user information (não precisa de dados do usuário)
 4. Adicione as URLs obrigatórias:
-   - **Privacy Policy URL**: `https://raw.githubusercontent.com/[seu-usuario]/gastandoya-api/main/PRIVACY.md`
-   - **Terms of Use URL**: `https://raw.githubusercontent.com/[seu-usuario]/gastandoya-api/main/TERMS.md`
+   - **Privacy Policy URL**: `https://gastandoya-api.vercel.app/privacy`
+   - **Terms of Use URL**: `https://gastandoya-api.vercel.app/terms`
 5. Clique em **"Submit"**
 6. Na página da integração:
    - Copie o **OAuth client ID** → `NOTION_CLIENT_ID`

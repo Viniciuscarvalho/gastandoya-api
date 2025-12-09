@@ -149,3 +149,4 @@ Ao usar o GastandoYa e conectar sua conta Notion, você reconhece que leu, compr
 **GastandoYa** - Controle suas despesas de forma inteligente  
 Versão 1.0 | Dezembro 2025
 
+
