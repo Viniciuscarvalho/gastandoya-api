@@ -19,10 +19,17 @@ export const dynamic = 'force-dynamic'
  */
 export async function GET(request: NextRequest) {
   try {
+    // Log para debug
+    console.log('📝 OAuth Authorize called')
+    console.log('URL:', request.url)
+    
     const searchParams = request.nextUrl.searchParams
     const userId = searchParams.get('userId')
 
+    console.log('userId:', userId)
+
     if (!userId) {
+      console.warn('⚠️ Missing userId parameter')
       return NextResponse.json(
         { error: 'Missing userId parameter' },
         { status: 400 }
@@ -31,6 +38,7 @@ export async function GET(request: NextRequest) {
 
     // Gerar state para CSRF protection
     const state = generateOAuthState(userId)
+    console.log('✅ State generated for user:', userId)
 
     // Construir URL de autorização do Notion
     const authUrl = new URL(config.notion.authorizationUrl)
@@ -40,10 +48,12 @@ export async function GET(request: NextRequest) {
     authUrl.searchParams.append('owner', 'user')
     authUrl.searchParams.append('state', state)
 
+    console.log('🔀 Redirecting to:', authUrl.toString())
+
     // Redirecionar para o Notion
     return NextResponse.redirect(authUrl.toString())
   } catch (error) {
-    console.error('Error in OAuth authorize:', error instanceof Error ? error.message : 'Unknown error')
+    console.error('❌ Error in OAuth authorize:', error instanceof Error ? error.message : 'Unknown error')
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

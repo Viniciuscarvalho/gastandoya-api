@@ -37,14 +37,19 @@ interface NotionOAuthTokenResponse {
  */
 export async function GET(request: NextRequest) {
   try {
+    console.log('📝 OAuth Callback called')
+    console.log('URL:', request.url)
+    
     const searchParams = request.nextUrl.searchParams
     const code = searchParams.get('code')
     const state = searchParams.get('state')
     const error = searchParams.get('error')
 
+    console.log('Received params:', { code: code ? 'present' : 'missing', state: state ? 'present' : 'missing', error })
+
     // Verificar se o usuário negou autorização
     if (error) {
-      console.error('OAuth authorization denied:', error)
+      console.error('❌ OAuth authorization denied:', error)
       return NextResponse.redirect(
         `${config.app.baseUrl}/notion/error?reason=authorization_denied`
       )
@@ -52,6 +57,7 @@ export async function GET(request: NextRequest) {
 
     // Validar parâmetros
     if (!code || !state) {
+      console.warn('⚠️ Missing code or state parameter')
       return NextResponse.json(
         { error: 'Missing code or state parameter' },
         { status: 400 }
@@ -59,18 +65,25 @@ export async function GET(request: NextRequest) {
     }
 
     // Validar state e extrair userId
+    console.log('🔐 Validating state...')
     const userId = validateOAuthState(state)
     if (!userId) {
+      console.error('❌ Invalid or expired state')
       return NextResponse.json(
         { error: 'Invalid or expired state' },
         { status: 400 }
       )
     }
 
+    console.log('✅ State validated, userId:', userId)
+
     // Trocar código por access_token
+    console.log('🔄 Exchanging code for token...')
     const tokenResponse = await exchangeCodeForToken(code)
+    console.log('✅ Token received from Notion')
 
     // Persistir conexão
+    console.log('💾 Saving connection to store...')
     const store = getUserNotionConnectionStore()
     await store.saveOrUpdate({
       userId,
@@ -84,14 +97,15 @@ export async function GET(request: NextRequest) {
     console.log(`✅ Notion connection created for user ${userId}`)
 
     // Redirecionar para página de sucesso
-    // Em produção, isso seria uma deep link pro app iOS
-    return NextResponse.redirect(
-      `${config.app.baseUrl}/notion/success?userId=${userId}`
-    )
+    const successUrl = `${config.app.baseUrl}/notion/success?userId=${encodeURIComponent(userId)}`
+    console.log('🔀 Redirecting to:', successUrl)
+    
+    return NextResponse.redirect(successUrl)
   } catch (error) {
-    console.error('Error in OAuth callback:', error instanceof Error ? error.message : 'Unknown error')
+    console.error('❌ Error in OAuth callback:', error instanceof Error ? error.message : 'Unknown error')
+    console.error('Stack:', error instanceof Error ? error.stack : '')
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Internal server error', details: error instanceof Error ? error.message : 'Unknown' },
       { status: 500 }
     )
   }

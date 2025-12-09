@@ -280,7 +280,7 @@ Estes Termos podem ser traduzidos para outros idiomas. Em caso de conflito, a ve
 
 Partes do GastandoYa podem incluir software de código aberto. Esses componentes estão sujeitos às suas próprias licenças, que podem ser encontradas em:
 
-**Repositório GitHub:** https://github.com/[seu-usuario]/gastandoya-api
+**Repositório GitHub:** https://github.com/viniciuscarvalho/gastandoya-api
 
 ## 17. Conformidade com LGPD
 
@@ -290,9 +290,8 @@ O GastandoYa está em conformidade com a Lei Geral de Proteção de Dados (LGPD 
 
 Se você tiver dúvidas sobre estes Termos de Uso, entre em contato:
 
-**E-mail Legal:** legal@gastandoya.com  
-**E-mail Suporte:** support@gastandoya.com  
-**Repositório GitHub:** https://github.com/[seu-usuario]/gastandoya-api
+**E-mail Suporte:** contato@gastandoya.com  
+**Repositório GitHub:** https://github.com/viniciuscarvalho/gastandoya-api
 
 ## 19. Aceitação
 
@@ -307,5 +306,6 @@ AO USAR O GASTANDOYA, VOCÊ RECONHECE QUE LEU, COMPREENDEU E CONCORDA EM ESTAR V
 Versão 1.0 | Dezembro 2025
 
 © 2025 GastandoYa. Todos os direitos reservados.
+
 
 
