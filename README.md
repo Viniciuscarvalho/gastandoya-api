@@ -91,8 +91,12 @@ A API estará disponível em `http://localhost:3000`.
 3. **Usuário** concede permissão ao GastandoYa
 4. **Notion** redireciona de volta para: `/api/notion/oauth/callback?code=...&state=...`
 5. **Backend** troca o `code` por `access_token` e salva no `UserNotionConnectionStore`
-6. **Backend** redireciona para deep link: `gastandoya://notion/callback?success=true&userId=...`
-7. **App iOS** abre automaticamente e processa o callback
+6. **Backend** redireciona para página intermediária: `/notion/redirect?success=true&userId=...`
+7. **Página intermediária** usa JavaScript para abrir o deep link: `gastandoya://notion/callback?...`
+8. **Safari** mostra banner "Abrir em GastandoYa?"
+9. **App iOS** abre automaticamente após usuário tocar no banner
+
+> 💡 **Nota**: A página intermediária é necessária porque o Safari iOS não permite redirecionamentos server-side diretos para URLs customizadas (`gastandoya://`)
 
 ### Testando o OAuth Manualmente
 
@@ -102,9 +106,12 @@ Abra no navegador:
 http://localhost:3000/api/notion/oauth/authorize?userId=test-user-1
 ```
 
-Após autorizar no Notion, você será redirecionado para `gastandoya://notion/callback?success=true&userId=test-user-1`
+Após autorizar no Notion, você verá uma página intermediária que tentará abrir o deep link:
+```
+http://localhost:3000/notion/redirect?success=true&userId=test-user-1
+```
 
-> 💡 **Nota**: No navegador, verá "Safari cannot open the page" se o app iOS não estiver instalado. Isso é esperado!
+> 💡 **Nota**: No navegador desktop, verá "Safari cannot open the page" se o app iOS não estiver instalado. Isso é esperado! No iOS, o Safari mostrará um banner "Abrir em GastandoYa?".
 
 ## 📁 Estrutura do Projeto
 
