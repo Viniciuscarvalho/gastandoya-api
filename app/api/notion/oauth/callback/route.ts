@@ -50,19 +50,21 @@ export async function GET(request: NextRequest) {
     // Verificar se o usuário negou autorização
     if (error) {
       console.error('❌ OAuth authorization denied:', error)
-      // Redirecionar para o app iOS via deep link
-      const deepLinkUrl = `gastandoya://notion/callback?error=${encodeURIComponent('authorization_denied')}`
-      console.log('🔀 Redirecting to iOS app (error):', deepLinkUrl)
-      return NextResponse.redirect(deepLinkUrl)
+      // Redirecionar para página intermediária que abrirá o deep link
+      const redirectUrl = new URL('/notion/redirect', config.app.baseUrl)
+      redirectUrl.searchParams.append('error', 'authorization_denied')
+      console.log('🔀 Redirecting to intermediate page:', redirectUrl.toString())
+      return NextResponse.redirect(redirectUrl.toString())
     }
 
     // Validar parâmetros
     if (!code || !state) {
       console.warn('⚠️ Missing code or state parameter')
-      // Redirecionar para o app iOS via deep link
-      const deepLinkUrl = `gastandoya://notion/callback?error=${encodeURIComponent('missing_parameters')}`
-      console.log('🔀 Redirecting to iOS app (error):', deepLinkUrl)
-      return NextResponse.redirect(deepLinkUrl)
+      // Redirecionar para página intermediária que abrirá o deep link
+      const redirectUrl = new URL('/notion/redirect', config.app.baseUrl)
+      redirectUrl.searchParams.append('error', 'missing_parameters')
+      console.log('🔀 Redirecting to intermediate page:', redirectUrl.toString())
+      return NextResponse.redirect(redirectUrl.toString())
     }
 
     // Validar state e extrair userId
@@ -70,10 +72,11 @@ export async function GET(request: NextRequest) {
     const userId = validateOAuthState(state)
     if (!userId) {
       console.error('❌ Invalid or expired state')
-      // Redirecionar para o app iOS via deep link
-      const deepLinkUrl = `gastandoya://notion/callback?error=${encodeURIComponent('invalid_state')}`
-      console.log('🔀 Redirecting to iOS app (error):', deepLinkUrl)
-      return NextResponse.redirect(deepLinkUrl)
+      // Redirecionar para página intermediária que abrirá o deep link
+      const redirectUrl = new URL('/notion/redirect', config.app.baseUrl)
+      redirectUrl.searchParams.append('error', 'invalid_state')
+      console.log('🔀 Redirecting to intermediate page:', redirectUrl.toString())
+      return NextResponse.redirect(redirectUrl.toString())
     }
 
     console.log('✅ State validated, userId:', userId)
@@ -97,21 +100,24 @@ export async function GET(request: NextRequest) {
 
     console.log(`✅ Notion connection created for user ${userId}`)
 
-    // Redirecionar para o app iOS via deep link
-    const deepLinkUrl = `gastandoya://notion/callback?success=true&userId=${encodeURIComponent(userId)}`
-    console.log('🔀 Redirecting to iOS app (success):', deepLinkUrl)
+    // Redirecionar para página intermediária que abrirá o deep link
+    const redirectUrl = new URL('/notion/redirect', config.app.baseUrl)
+    redirectUrl.searchParams.append('success', 'true')
+    redirectUrl.searchParams.append('userId', userId)
+    console.log('🔀 Redirecting to intermediate page:', redirectUrl.toString())
     
-    return NextResponse.redirect(deepLinkUrl)
+    return NextResponse.redirect(redirectUrl.toString())
   } catch (error) {
     console.error('❌ Error in OAuth callback:', error instanceof Error ? error.message : 'Unknown error')
     console.error('Stack:', error instanceof Error ? error.stack : '')
     
-    // Redirecionar para o app iOS via deep link com erro
+    // Redirecionar para página intermediária que abrirá o deep link com erro
     const errorMessage = error instanceof Error ? error.message : 'internal_server_error'
-    const deepLinkUrl = `gastandoya://notion/callback?error=${encodeURIComponent(errorMessage)}`
-    console.log('🔀 Redirecting to iOS app (error):', deepLinkUrl)
+    const redirectUrl = new URL('/notion/redirect', config.app.baseUrl)
+    redirectUrl.searchParams.append('error', errorMessage)
+    console.log('🔀 Redirecting to intermediate page:', redirectUrl.toString())
     
-    return NextResponse.redirect(deepLinkUrl)
+    return NextResponse.redirect(redirectUrl.toString())
   }
 }
 

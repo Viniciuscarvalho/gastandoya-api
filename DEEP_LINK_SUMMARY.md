@@ -249,3 +249,4 @@ Após implementação completa:
 - 📱 iOS: `IOS_INTEGRATION_GUIDE.md` e `IOS_DEEPLINK_SETUP.md`
 - 🖥️ Backend: `README.md`
 - 🏗️ Arquitetura: `ARCHITECTURE.md`
+
