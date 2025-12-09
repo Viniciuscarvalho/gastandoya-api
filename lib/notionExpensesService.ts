@@ -118,7 +118,7 @@ function notionPageToExpenseDTO(page: any): ExpenseDTO | null {
     date: dateValue,
     amount: amountInCents,
     currency: 'BRL', // Fixo na V1
-    category,
+    category: category ?? undefined, // Converter null para undefined
     createdAt,
     updatedAt,
   }
