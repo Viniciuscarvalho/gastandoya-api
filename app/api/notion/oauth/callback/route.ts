@@ -50,18 +50,19 @@ export async function GET(request: NextRequest) {
     // Verificar se o usuário negou autorização
     if (error) {
       console.error('❌ OAuth authorization denied:', error)
-      return NextResponse.redirect(
-        `${config.app.baseUrl}/notion/error?reason=authorization_denied`
-      )
+      // Redirecionar para o app iOS via deep link
+      const deepLinkUrl = `gastandoya://notion/callback?error=${encodeURIComponent('authorization_denied')}`
+      console.log('🔀 Redirecting to iOS app (error):', deepLinkUrl)
+      return NextResponse.redirect(deepLinkUrl)
     }
 
     // Validar parâmetros
     if (!code || !state) {
       console.warn('⚠️ Missing code or state parameter')
-      return NextResponse.json(
-        { error: 'Missing code or state parameter' },
-        { status: 400 }
-      )
+      // Redirecionar para o app iOS via deep link
+      const deepLinkUrl = `gastandoya://notion/callback?error=${encodeURIComponent('missing_parameters')}`
+      console.log('🔀 Redirecting to iOS app (error):', deepLinkUrl)
+      return NextResponse.redirect(deepLinkUrl)
     }
 
     // Validar state e extrair userId
@@ -69,10 +70,10 @@ export async function GET(request: NextRequest) {
     const userId = validateOAuthState(state)
     if (!userId) {
       console.error('❌ Invalid or expired state')
-      return NextResponse.json(
-        { error: 'Invalid or expired state' },
-        { status: 400 }
-      )
+      // Redirecionar para o app iOS via deep link
+      const deepLinkUrl = `gastandoya://notion/callback?error=${encodeURIComponent('invalid_state')}`
+      console.log('🔀 Redirecting to iOS app (error):', deepLinkUrl)
+      return NextResponse.redirect(deepLinkUrl)
     }
 
     console.log('✅ State validated, userId:', userId)
@@ -96,18 +97,21 @@ export async function GET(request: NextRequest) {
 
     console.log(`✅ Notion connection created for user ${userId}`)
 
-    // Redirecionar para página de sucesso
-    const successUrl = `${config.app.baseUrl}/notion/success?userId=${encodeURIComponent(userId)}`
-    console.log('🔀 Redirecting to:', successUrl)
+    // Redirecionar para o app iOS via deep link
+    const deepLinkUrl = `gastandoya://notion/callback?success=true&userId=${encodeURIComponent(userId)}`
+    console.log('🔀 Redirecting to iOS app (success):', deepLinkUrl)
     
-    return NextResponse.redirect(successUrl)
+    return NextResponse.redirect(deepLinkUrl)
   } catch (error) {
     console.error('❌ Error in OAuth callback:', error instanceof Error ? error.message : 'Unknown error')
     console.error('Stack:', error instanceof Error ? error.stack : '')
-    return NextResponse.json(
-      { error: 'Internal server error', details: error instanceof Error ? error.message : 'Unknown' },
-      { status: 500 }
-    )
+    
+    // Redirecionar para o app iOS via deep link com erro
+    const errorMessage = error instanceof Error ? error.message : 'internal_server_error'
+    const deepLinkUrl = `gastandoya://notion/callback?error=${encodeURIComponent(errorMessage)}`
+    console.log('🔀 Redirecting to iOS app (error):', deepLinkUrl)
+    
+    return NextResponse.redirect(deepLinkUrl)
   }
 }
 

@@ -517,3 +517,4 @@ Received params: { code: 'present', state: 'present', error: null }
 5. **App usa userId** → Em todas as chamadas de API
 
 **Não precisa de login ou cadastro!** Cada instalação do app tem seu próprio UUID único. 🚀
+
