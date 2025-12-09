@@ -137,8 +137,8 @@ O GastandoYa está comprometido em cumprir a Lei Geral de Proteção de Dados (L
 
 Se você tiver dúvidas sobre esta Política de Privacidade ou sobre como tratamos seus dados, entre em contato:
 
-**E-mail:** privacy@gastandoya.com  
-**Repositório GitHub:** https://github.com/[seu-usuario]/gastandoya-api
+**E-mail:** contato@gastandoya.com  
+**Repositório GitHub:** https://github.com/viniciuscarvalho/gastandoya-api
 
 ## 14. Consentimento
 
@@ -148,5 +148,6 @@ Ao usar o GastandoYa e conectar sua conta Notion, você reconhece que leu, compr
 
 **GastandoYa** - Controle suas despesas de forma inteligente  
 Versão 1.0 | Dezembro 2025
+
 
 
