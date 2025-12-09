@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import { config } from '@/lib/config'
 import { notionExpensesService } from '@/lib/notionExpensesService'
 
+// Força renderização dinâmica (necessário para headers)
+export const dynamic = 'force-dynamic'
+
 /**
  * GET /api/notion/expenses
  * 

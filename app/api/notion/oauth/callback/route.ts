@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import { config, validateOAuthState } from '@/lib/config'
 import { getUserNotionConnectionStore } from '@/lib/userNotionConnectionStore'
 
+// Força renderização dinâmica (necessário para searchParams)
+export const dynamic = 'force-dynamic'
+
 /**
  * Estrutura da resposta do Notion OAuth token exchange
  */

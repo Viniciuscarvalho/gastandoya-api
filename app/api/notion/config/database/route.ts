@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import { config } from '@/lib/config'
 import { getUserNotionConnectionStore } from '@/lib/userNotionConnectionStore'
 
+// Força renderização dinâmica (necessário para headers e body)
+export const dynamic = 'force-dynamic'
+
 /**
  * POST /api/notion/config/database
  * 
