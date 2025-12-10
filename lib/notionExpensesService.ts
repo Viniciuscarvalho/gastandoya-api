@@ -122,25 +122,27 @@ function notionPageToExpenseDTO(page: any): ExpenseDTO | null {
 
   const props = page.properties
 
-  // Extrair descrição (campo title ou rich_text chamado "Description", "Name", "Título", etc.)
+  // Extrair descrição (priorizar nomes em português)
   const description = extractText(
-    props.Description || props.Name || props.Título || props.Title
+    props.Descrição || props.Description || props.Name || props.Título || props.Title
   )
   if (!description) return null // Descrição é obrigatória
 
-  // Extrair data
-  const dateValue = extractDate(props.Date || props.Data)
+  // Extrair data (priorizar nomes em português)
+  const dateValue = extractDate(props.Data || props.Date)
   if (!dateValue) return null // Data é obrigatória
 
-  // Extrair valor (em reais, converter para centavos)
-  const amountInBRL = extractNumber(props.Amount || props.Valor || props.Value)
+  // Extrair valor (priorizar nomes em português, em reais converter para centavos)
+  const amountInBRL = extractNumber(props.Valor || props.Amount || props.Value)
   if (amountInBRL === null) return null // Valor é obrigatório
 
   const amountInCents = Math.round(amountInBRL * 100)
 
-  // Extrair categoria (opcional)
+  // Extrair categoria (opcional - pode ser select, rich_text ou relation)
+  // Nota: relation retorna apenas IDs, não nomes, então deixamos como undefined na V1
   const category = extractSelect(props.Category || props.Categoria) 
     || extractText(props.Category || props.Categoria)
+    // Relations não são suportadas na V1 - retornam apenas IDs
 
   // Metadados da página
   const createdAt = page.created_time || new Date().toISOString()
