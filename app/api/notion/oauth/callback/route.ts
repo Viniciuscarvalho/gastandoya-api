@@ -89,16 +89,33 @@ export async function GET(request: NextRequest) {
     // Persistir conexão
     console.log('💾 Saving connection to store...')
     const store = getUserNotionConnectionStore()
-    await store.saveOrUpdate({
+    const connectionData = {
       userId,
       accessToken: tokenResponse.access_token,
       workspaceId: tokenResponse.workspace_id,
       expensesDatabaseId: undefined, // Será configurado posteriormente
       createdAt: new Date(),
       updatedAt: new Date(),
+    }
+    
+    console.log('📝 Connection data to save:', {
+      userId: connectionData.userId,
+      workspaceId: connectionData.workspaceId,
+      hasAccessToken: !!connectionData.accessToken,
+      accessTokenLength: connectionData.accessToken?.length || 0,
     })
+    
+    await store.saveOrUpdate(connectionData)
 
     console.log(`✅ Notion connection created for user ${userId}`)
+    
+    // Verificar se foi salvo corretamente
+    const savedConnection = await store.getByUserId(userId)
+    console.log('🔍 Verification - Connection retrieved from store:', {
+      found: !!savedConnection,
+      userId: savedConnection?.userId,
+      hasAccessToken: !!savedConnection?.accessToken,
+    })
 
     // Redirecionar para página intermediária que abrirá o deep link
     const redirectUrl = new URL('/notion/redirect', config.app.baseUrl)
