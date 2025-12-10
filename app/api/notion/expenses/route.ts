@@ -22,6 +22,8 @@ export const dynamic = 'force-dynamic'
  */
 export async function GET(request: NextRequest) {
   try {
+    console.log('🚀 [expenses] Starting request...')
+    
     // 1. Validar x-api-key
     const apiKey = request.headers.get('x-api-key')
     
@@ -32,23 +34,32 @@ export async function GET(request: NextRequest) {
         { status: 401 }
       )
     }
+    console.log('✅ [expenses] API key validated')
 
     // 2. Extrair userId
     const userId = request.headers.get('x-user-id')
     if (!userId) {
+      console.error('❌ [expenses] Missing x-user-id header')
       return NextResponse.json(
         { error: 'Bad Request', message: 'Missing x-user-id header' },
         { status: 400 }
       )
     }
+    console.log('✅ [expenses] userId:', userId)
 
     // 3. Buscar despesas do Notion
+    console.log('📊 [expenses] Calling notionExpensesService.fetchExpensesForUser...')
     const expenses = await notionExpensesService.fetchExpensesForUser(userId)
+    console.log('✅ [expenses] Expenses fetched successfully, count:', expenses.length)
 
     // 4. Retornar sucesso
     return NextResponse.json(expenses, { status: 200 })
   } catch (error: any) {
-    console.error('Error in GET /api/notion/expenses:', error.message)
+    console.error('❌ [expenses] Error details:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name,
+    })
 
     // Tratar erros conhecidos
     if (error.message.includes('does not have a Notion connection')) {
@@ -68,6 +79,17 @@ export async function GET(request: NextRequest) {
           message: 'User has not configured an expenses database' 
         },
         { status: 404 }
+      )
+    }
+
+    if (error.message.includes('NOTION_DATABASE_NOT_FOUND')) {
+      return NextResponse.json(
+        {
+          error: 'Notion database not found',
+          message:
+            'Notion could not find the configured database. Check that the database ID is correct and that it is shared with the GastandoYa integration.',
+        },
+        { status: 404 },
       )
     }
 
