@@ -11,14 +11,6 @@ function getEnvVar(name: string, required: boolean = true): string {
   return value || ''
 }
 
-// Log env vars para debug (será removido depois)
-console.log('🔧 Config initialization:')
-console.log('  - APP_API_KEY exists:', !!process.env.APP_API_KEY)
-console.log('  - APP_API_KEY length:', process.env.APP_API_KEY?.length || 0)
-console.log('  - APP_API_KEY value (first 5 chars):', process.env.APP_API_KEY?.substring(0, 5) || 'undefined')
-console.log('  - REDIS_URL exists:', !!process.env.REDIS_URL)
-console.log('  - NOTION_CLIENT_ID exists:', !!process.env.NOTION_CLIENT_ID)
-
 export const config = {
   notion: {
     clientId: getEnvVar('NOTION_CLIENT_ID'),
