@@ -30,20 +30,13 @@ export async function POST(request: NextRequest) {
     // 1. Validar x-api-key
     const apiKey = request.headers.get('x-api-key')
     
-    // Debug logs
-    console.log('🔎 [config/database] x-api-key header:', JSON.stringify(apiKey))
-    console.log('🔎 [config/database] APP_API_KEY (config.app.apiKey):', JSON.stringify(config.app.apiKey))
-    console.log('🔎 [config/database] Match:', apiKey === config.app.apiKey)
-    
     if (!apiKey || apiKey !== config.app.apiKey) {
-      console.error('❌ [config/database] Unauthorized: API key mismatch')
+      console.error('❌ Unauthorized: API key mismatch')
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
       )
     }
-    
-    console.log('✅ [config/database] API key validated successfully')
 
     // 2. Extrair userId
     const userId = request.headers.get('x-user-id')
@@ -66,19 +59,11 @@ export async function POST(request: NextRequest) {
     }
 
     // 4. Buscar conexão existente
-    console.log('🔍 [config/database] Looking for connection for userId:', userId)
     const store = getUserNotionConnectionStore()
     const connection = await store.getByUserId(userId)
 
-    console.log('🔍 [config/database] Connection found:', {
-      found: !!connection,
-      userId: connection?.userId,
-      hasAccessToken: !!connection?.accessToken,
-      workspaceId: connection?.workspaceId,
-    })
-
     if (!connection) {
-      console.error('❌ [config/database] No Notion connection found for user:', userId)
+      console.error('❌ No Notion connection found for user:', userId)
       return NextResponse.json(
         { error: 'User does not have a Notion connection' },
         { status: 404 }
@@ -86,13 +71,12 @@ export async function POST(request: NextRequest) {
     }
 
     // 5. Atualizar com o databaseId
-    console.log('💾 [config/database] Updating connection with databaseId:', databaseId)
     await store.saveOrUpdate({
       ...connection,
       expensesDatabaseId: databaseId,
     })
     
-    console.log('✅ [config/database] Database configured successfully for user:', userId)
+    console.log('✅ Database configured successfully for user:', userId)
 
     return NextResponse.json({
       success: true,
