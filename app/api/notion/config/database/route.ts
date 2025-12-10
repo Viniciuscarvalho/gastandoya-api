@@ -3,7 +3,6 @@ import { config } from '@/lib/config'
 import { getUserNotionConnectionStore } from '@/lib/userNotionConnectionStore'
 import { normalizeNotionId } from '@/lib/notionId'
 import { createNotionClient } from '@/lib/notionClient'
-import { normalizeNotionId } from '@/lib/notionId'
 
 // Força renderização dinâmica (necessário para headers e body)
 export const dynamic = 'force-dynamic'
