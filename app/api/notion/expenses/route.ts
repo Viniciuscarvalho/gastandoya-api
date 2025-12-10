@@ -24,12 +24,21 @@ export async function GET(request: NextRequest) {
   try {
     // 1. Validar x-api-key
     const apiKey = request.headers.get('x-api-key')
+    
+    // Debug logs
+    console.log('🔎 [expenses] x-api-key header:', JSON.stringify(apiKey))
+    console.log('🔎 [expenses] APP_API_KEY (config.app.apiKey):', JSON.stringify(config.app.apiKey))
+    console.log('🔎 [expenses] Match:', apiKey === config.app.apiKey)
+    
     if (!apiKey || apiKey !== config.app.apiKey) {
+      console.error('❌ [expenses] Unauthorized: API key mismatch')
       return NextResponse.json(
         { error: 'Unauthorized', message: 'Invalid or missing x-api-key' },
         { status: 401 }
       )
     }
+    
+    console.log('✅ [expenses] API key validated successfully')
 
     // 2. Extrair userId
     const userId = request.headers.get('x-user-id')
