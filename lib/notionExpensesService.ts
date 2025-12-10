@@ -1,5 +1,6 @@
 import { createNotionClient } from './notionClient'
 import { getUserNotionConnectionStore } from './userNotionConnectionStore'
+import { normalizeNotionId } from './notionId'
 import type { ExpenseDTO } from './types'
 import type { QueryDatabaseResponse } from '@notionhq/client/build/src/api-endpoints'
 
@@ -16,22 +17,41 @@ export class NotionExpensesService {
    * @throws Error se o usuário não tiver conexão Notion ou se houver falha na API
    */
   async fetchExpensesForUser(userId: string): Promise<ExpenseDTO[]> {
+    console.log('🔍 [notionExpensesService] Fetching expenses for userId:', userId)
+    
     // 1. Buscar conexão Notion do usuário
     const store = getUserNotionConnectionStore()
+    console.log('📦 [notionExpensesService] Getting connection from store...')
     const connection = await store.getByUserId(userId)
 
     if (!connection) {
+      console.error('❌ [notionExpensesService] No connection found for user:', userId)
       throw new Error(`User ${userId} does not have a Notion connection`)
     }
+    
+    console.log('✅ [notionExpensesService] Connection found:', {
+      userId: connection.userId,
+      hasAccessToken: !!connection.accessToken,
+      expensesDatabaseId: connection.expensesDatabaseId,
+    })
 
     if (!connection.expensesDatabaseId) {
+      console.error('❌ [notionExpensesService] No database configured for user:', userId)
       throw new Error(`User ${userId} has not configured an expenses database`)
     }
 
+    const normalizedDatabaseId = normalizeNotionId(connection.expensesDatabaseId)
+    console.log('🆔 [notionExpensesService] Normalized databaseId:', {
+      raw: connection.expensesDatabaseId,
+      normalized: normalizedDatabaseId,
+    })
+
     // 2. Criar client autenticado
+    console.log('🔐 [notionExpensesService] Creating Notion client...')
     const notion = createNotionClient(connection.accessToken)
 
     // 3. Consultar database com paginação
+    console.log('📊 [notionExpensesService] Querying Notion database:', normalizedDatabaseId)
     const allPages: any[] = []
     let hasMore = true
     let startCursor: string | undefined = undefined
@@ -39,19 +59,32 @@ export class NotionExpensesService {
     while (hasMore) {
       try {
         const response: QueryDatabaseResponse = await notion.databases.query({
-          database_id: connection.expensesDatabaseId,
+          database_id: normalizedDatabaseId,
           start_cursor: startCursor,
           page_size: 100, // Máximo permitido pela Notion API
         })
 
+        console.log(`📄 [notionExpensesService] Retrieved ${response.results.length} pages, hasMore: ${response.has_more}`)
         allPages.push(...response.results)
         hasMore = response.has_more
         startCursor = response.next_cursor ?? undefined
       } catch (error: any) {
-        console.error('Error querying Notion database:', error.message)
+        console.error('❌ [notionExpensesService] Error querying Notion database:', {
+          message: error.message,
+          code: error.code,
+          status: error.status,
+        })
+
+        // Erros típicos de database inexistente ou sem acesso
+        if (error.code === 'object_not_found' || error.code === 'validation_error') {
+          throw new Error(`NOTION_DATABASE_NOT_FOUND: ${error.message}`)
+        }
+
         throw new Error(`Failed to fetch expenses from Notion: ${error.message}`)
       }
     }
+
+    console.log(`✅ [notionExpensesService] Total pages retrieved: ${allPages.length}`)
 
     // 4. Transformar páginas em ExpenseDTO
     const expenses: ExpenseDTO[] = []
@@ -63,10 +96,11 @@ export class NotionExpensesService {
         }
       } catch (error) {
         // Ignorar páginas com dados inválidos
-        console.warn('Failed to parse page:', page.id, error)
+        console.warn('⚠️ [notionExpensesService] Failed to parse page:', page.id, error)
       }
     }
 
+    console.log(`✅ [notionExpensesService] Parsed ${expenses.length} expenses successfully`)
     return expenses
   }
 }
