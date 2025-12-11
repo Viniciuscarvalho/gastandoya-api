@@ -1,0 +1,19 @@
+{
+  "features": {
+    "unlimited_categories": { "enabled": true },
+    "unlimited_goals": { "enabled": true },
+    "unlimited_wallets": { "enabled": true },
+    "unlimited_csv_imports": { "enabled": true },
+    "cloud_sync": { "enabled": true },
+    "cloud_backup": { "enabled": true },
+    "notion_import": { "enabled": true },
+    "advanced_reports": { "enabled": true },
+    "pdf_export": { "enabled": true },
+    "excel_export": { "enabled": true },
+    "smart_rules": { "enabled": true },
+    "ai_insights": { "enabled": true },
+    "premium_widgets": { "enabled": true }
+  }
+}
+
+
