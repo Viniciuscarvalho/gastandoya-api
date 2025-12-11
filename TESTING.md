@@ -129,6 +129,85 @@ curl -X GET http://localhost:3000/api/notion/expenses \
 > **Nota**: O campo `amount` está em **centavos**. 
 > Ex: R$ 45,90 = 4590 centavos
 
+## Testar endpoint de Feature Flags (`GET /api/features`)
+
+### 1. Sucesso (200)
+
+```bash
+curl -X GET http://localhost:3000/api/features \
+  -H "x-api-key: your_secure_random_string_for_app_ios"
+```
+
+**Resposta esperada (200):**
+
+```json
+{
+  "features": {
+    "unlimited_categories": { "enabled": true },
+    "unlimited_goals": { "enabled": true },
+    "unlimited_wallets": { "enabled": true },
+    "unlimited_csv_imports": { "enabled": true },
+    "cloud_sync": { "enabled": true },
+    "cloud_backup": { "enabled": true },
+    "notion_import": { "enabled": true },
+    "advanced_reports": { "enabled": true },
+    "pdf_export": { "enabled": true },
+    "excel_export": { "enabled": true },
+    "smart_rules": { "enabled": true },
+    "ai_insights": { "enabled": true },
+    "premium_widgets": { "enabled": true }
+  }
+}
+```
+
+### 2. Erro 401 – x-api-key inválido
+
+```bash
+curl -X GET http://localhost:3000/api/features \
+  -H "x-api-key: wrong-key"
+```
+
+**Resposta esperada (401):**
+
+```json
+{
+  "error": "Unauthorized",
+  "message": "Invalid or missing x-api-key"
+}
+```
+
+### 3. Consumo no app iOS (exemplo em Swift)
+
+```swift
+struct FeatureConfig: Decodable {
+    let enabled: Bool
+}
+
+struct FeatureFlagsResponse: Decodable {
+    let features: [String: FeatureConfig]
+}
+
+func fetchFeatureFlags() async throws -> FeatureFlagsResponse {
+    var request = URLRequest(url: URL(string: "https://api.gastandoya.com/api/features")!)
+    request.httpMethod = "GET"
+    request.addValue("your_secure_random_string_for_app_ios", forHTTPHeaderField: "x-api-key")
+
+    let (data, response) = try await URLSession.shared.data(for: request)
+    guard let http = response as? HTTPURLResponse, http.statusCode == 200 else {
+        throw URLError(.badServerResponse)
+    }
+
+    return try JSONDecoder().decode(FeatureFlagsResponse.self, from: data)
+}
+```
+
+O app pode então verificar, por exemplo:
+
+```swift
+let flags = try await fetchFeatureFlags()
+let notionImportEnabled = flags.features["notion_import"]?.enabled ?? false
+```
+
 ## Testes de Erro
 
 ### 401 - x-api-key inválido
@@ -217,6 +296,7 @@ Depois de validar o fluxo manualmente:
 1. Implementar testes automatizados (Tarefa 4.0)
 2. Configurar deploy na Vercel (Tarefa 5.0)
 3. Integrar com o app iOS usando esses endpoints
+
 
 
 
