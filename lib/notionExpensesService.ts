@@ -5,6 +5,12 @@ import type { ExpenseDTO } from './types'
 import type { QueryDatabaseResponse } from '@notionhq/client/build/src/api-endpoints'
 
 /**
+ * Cache para nomes de páginas relacionadas (evita chamadas duplicadas à API)
+ * Key: page_id, Value: page title
+ */
+const pageTitleCache = new Map<string, string>()
+
+/**
  * Serviço para buscar despesas do Notion de um usuário específico.
  * Encapsula a lógica de consulta ao database, paginação e transformação para ExpenseDTO.
  */
@@ -90,7 +96,7 @@ export class NotionExpensesService {
     const expenses: ExpenseDTO[] = []
     for (const page of allPages) {
       try {
-        const expense = notionPageToExpenseDTO(page)
+        const expense = await notionPageToExpenseDTO(page, notion)
         if (expense) {
           expenses.push(expense)
         }
@@ -112,12 +118,13 @@ export class NotionExpensesService {
  * - Description (title ou rich_text) → description
  * - Date (date) → date
  * - Amount (number) → amount (em centavos)
- * - Category (select ou rich_text) → category
+ * - Category (select, rich_text ou relation) → category
  * 
  * @param page - Página do Notion retornada pela API
+ * @param notion - Client autenticado do Notion (para buscar relations)
  * @returns ExpenseDTO ou null se a página não puder ser parseada
  */
-function notionPageToExpenseDTO(page: any): ExpenseDTO | null {
+async function notionPageToExpenseDTO(page: any, notion: any): Promise<ExpenseDTO | null> {
   if (!page.properties) return null
 
   const props = page.properties
@@ -139,10 +146,30 @@ function notionPageToExpenseDTO(page: any): ExpenseDTO | null {
   const amountInCents = Math.round(amountInBRL * 100)
 
   // Extrair categoria (opcional - pode ser select, rich_text ou relation)
-  // Nota: relation retorna apenas IDs, não nomes, então deixamos como undefined na V1
-  const category = extractSelect(props.Category || props.Categoria) 
-    || extractText(props.Category || props.Categoria)
-    // Relations não são suportadas na V1 - retornam apenas IDs
+  let category: string | undefined = undefined
+  
+  // Tentar extract em ordem de preferência:
+  const categoryProp = props.Category || props.Categoria
+  
+  if (categoryProp) {
+    // 1. Tentar como select
+    category = extractSelect(categoryProp) ?? undefined
+    
+    // 2. Tentar como rich_text/title
+    if (!category) {
+      category = extractText(categoryProp) ?? undefined
+    }
+    
+    // 3. Tentar como relation (buscar nome da página relacionada)
+    if (!category) {
+      const relationIds = extractRelation(categoryProp)
+      if (relationIds && relationIds.length > 0) {
+        // Buscar apenas o primeiro relacionamento
+        const firstRelationId = relationIds[0]
+        category = await fetchPageTitle(notion, firstRelationId)
+      }
+    }
+  }
 
   // Metadados da página
   const createdAt = page.created_time || new Date().toISOString()
@@ -154,7 +181,7 @@ function notionPageToExpenseDTO(page: any): ExpenseDTO | null {
     date: dateValue,
     amount: amountInCents,
     currency: 'BRL', // Fixo na V1
-    category: category ?? undefined, // Converter null para undefined
+    category,
     createdAt,
     updatedAt,
   }
@@ -211,6 +238,70 @@ function extractNumber(prop: any): number | null {
 function extractSelect(prop: any): string | null {
   if (!prop || prop.type !== 'select' || !prop.select) return null
   return prop.select.name || null
+}
+
+/**
+ * Extrai IDs de páginas relacionadas de uma propriedade relation do Notion.
+ */
+function extractRelation(prop: any): string[] | null {
+  if (!prop || prop.type !== 'relation' || !Array.isArray(prop.relation)) return null
+  return prop.relation.map((rel: any) => rel.id).filter(Boolean)
+}
+
+/**
+ * Busca o título de uma página do Notion pelo ID.
+ * Utiliza cache para evitar chamadas duplicadas à API.
+ * 
+ * @param notion - Client autenticado do Notion
+ * @param pageId - ID da página a ser buscada
+ * @returns Título da página ou undefined em caso de erro
+ */
+async function fetchPageTitle(notion: any, pageId: string): Promise<string | undefined> {
+  // Verificar cache primeiro
+  if (pageTitleCache.has(pageId)) {
+    console.log(`📦 [fetchPageTitle] Cache hit for pageId: ${pageId}`)
+    return pageTitleCache.get(pageId)
+  }
+
+  try {
+    console.log(`🔍 [fetchPageTitle] Fetching page title for: ${pageId}`)
+    const page = await notion.pages.retrieve({ page_id: pageId })
+
+    // Extrair título da página
+    let title: string | undefined = undefined
+
+    if (page.properties) {
+      // Procurar propriedade title
+      for (const [, prop] of Object.entries(page.properties)) {
+        const propAny = prop as any
+        if (propAny.type === 'title' && Array.isArray(propAny.title)) {
+          title = propAny.title.map((t: any) => t.plain_text).join('').trim()
+          if (title) break
+        }
+      }
+    }
+
+    // Se não encontrou title, tentar usar o nome da página (fallback)
+    if (!title && page && (page as any).url) {
+      title = pageId.slice(0, 8) // Usar primeiros caracteres do ID como fallback
+    }
+
+    if (title) {
+      console.log(`✅ [fetchPageTitle] Found title "${title}" for pageId: ${pageId}`)
+      pageTitleCache.set(pageId, title)
+      return title
+    }
+
+    console.warn(`⚠️ [fetchPageTitle] No title found for pageId: ${pageId}`)
+    return undefined
+  } catch (error: any) {
+    console.error(`❌ [fetchPageTitle] Error fetching page ${pageId}:`, {
+      message: error.message,
+      code: error.code,
+    })
+    // Em caso de erro (ex: acesso negado), retornar undefined
+    return undefined
+  }
 }
 
 // Export singleton instance
