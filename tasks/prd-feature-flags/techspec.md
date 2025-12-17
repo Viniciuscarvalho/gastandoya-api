@@ -232,3 +232,4 @@ export async function GET(request: NextRequest): Promise<NextResponse>
 - `lib/config.ts` – acesso a `APP_API_KEY`.
 
 
+

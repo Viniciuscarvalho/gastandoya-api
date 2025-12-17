@@ -115,3 +115,4 @@ Esta V1 adotará o formato estruturado com nó raiz `features`, permitindo adici
 - Necessidade futura de metadata por feature (ex.: descrição, plano, data de ativação) – o formato atual permite adicionar campos dentro do objeto de cada feature.
 
 
+
