@@ -112,3 +112,6 @@ Detalhes de implementação serão abordados na Especificação Técnica.
 - Você quer suportar também `gastandoya.com.br` (apex) redirecionando para `www`? (Recomendado.)
 
 
+
+
+

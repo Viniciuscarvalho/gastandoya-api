@@ -56,7 +56,69 @@ Para verificar se a conexão foi salva, você pode adicionar uma rota de debug t
    - Clique em "Add connections"
    - Selecione sua integração "GastandoYa"
 
-### 4. Configurar Database de Despesas
+### 4. Descobrir Databases Automaticamente (Novo!)
+
+#### 4a. Listar databases dentro de uma página
+
+Se você autorizou uma **página** que contém um database inline:
+
+**Request:**
+
+```bash
+curl -X GET "http://localhost:3000/api/notion/databases/list?pageId=abc123def456" \
+  -H "x-api-key: your_secure_random_string_for_app_ios" \
+  -H "x-user-id: test-user-123"
+```
+
+**Resposta esperada (200):**
+
+```json
+{
+  "databases": [
+    {
+      "id": "db-uuid-123",
+      "title": "Despesas 2024",
+      "source": "page_blocks",
+      "pageId": "abc123def456"
+    }
+  ]
+}
+```
+
+#### 4b. Buscar databases por nome
+
+Buscar databases acessíveis pela integração usando o nome:
+
+**Request:**
+
+```bash
+curl -X GET "http://localhost:3000/api/notion/databases/list?q=GASTOS" \
+  -H "x-api-key: your_secure_random_string_for_app_ios" \
+  -H "x-user-id: test-user-123"
+```
+
+**Resposta esperada (200):**
+
+```json
+{
+  "databases": [
+    {
+      "id": "db-uuid-456",
+      "title": "GASTOS",
+      "source": "search"
+    },
+    {
+      "id": "db-uuid-789",
+      "title": "Gastos Pessoais",
+      "source": "search"
+    }
+  ]
+}
+```
+
+### 5. Configurar Database de Despesas
+
+#### 5a. Configuração manual (método tradicional)
 
 **Request:**
 
@@ -79,7 +141,63 @@ curl -X POST http://localhost:3000/api/notion/config/database \
 }
 ```
 
-### 5. Buscar Despesas
+#### 5b. Configuração automática via pageId (recomendado!)
+
+Quando você tem o ID de uma página que contém um database:
+
+**Request:**
+
+```bash
+curl -X POST http://localhost:3000/api/notion/config/database \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: your_secure_random_string_for_app_ios" \
+  -H "x-user-id: test-user-123" \
+  -d '{
+    "pageId": "page-uuid-123"
+  }'
+```
+
+**Casos de resposta:**
+
+1. **1 database encontrado (200)** - Configurado automaticamente:
+```json
+{
+  "success": true,
+  "message": "Expenses database configured successfully"
+}
+```
+
+2. **0 databases encontrados (400)**:
+```json
+{
+  "error": "No database found",
+  "message": "No databases found in the specified page. Make sure the page contains an inline database and is shared with the GastandoYa integration."
+}
+```
+
+3. **Múltiplos databases encontrados (409)** - Usuário deve escolher:
+```json
+{
+  "error": "Multiple databases found",
+  "message": "Found 2 databases in the page. Please select one.",
+  "databases": [
+    {
+      "id": "db-1",
+      "title": "Despesas 2024",
+      "source": "page_blocks",
+      "pageId": "page-uuid-123"
+    },
+    {
+      "id": "db-2",
+      "title": "Despesas Pessoais",
+      "source": "page_blocks",
+      "pageId": "page-uuid-123"
+    }
+  ]
+}
+```
+
+### 6. Buscar Despesas
 
 **Request:**
 
@@ -264,15 +382,35 @@ curl -X GET http://localhost:3000/api/notion/expenses \
 
 ## Dicas de Troubleshooting
 
+### Nenhum database encontrado na página
+
+Se `GET /api/notion/databases/list?pageId=...` retornar lista vazia:
+
+1. **Verifique se você compartilhou a página com a integração**:
+   - Abra a página no Notion
+   - Clique em `...` (três pontos) no canto superior direito
+   - Clique em "Add connections"
+   - Selecione sua integração "GastandoYa"
+
+2. **Certifique-se de que o database está inline na página**:
+   - O database precisa estar **dentro** da página (não linkado externamente)
+   - Você deve ver o database diretamente quando abrir a página
+
+3. **Verifique o tipo de database**:
+   - Suportamos `child_database` e `link_to_page` (quando apontar para database)
+   - Databases em subpáginas aninhadas podem não ser detectados
+
 ### Database ID não é reconhecido
 
 - Certifique-se de copiar apenas a parte alfanumérica do ID (sem hífens extras)
 - Remova qualquer `?v=...` da URL
+- Experimente usar o método de descoberta automática (`pageId`) ao invés de configurar manualmente
 
 ### "object not found" error do Notion
 
-- Verifique se você compartilhou o database com a integração
+- Verifique se você compartilhou o database/página com a integração
 - Vá no database → `...` → "Add connections" → Selecione sua integração
+- Se estiver usando `pageId`, compartilhe a **página**, não o database individual
 
 ### Propriedades não são encontradas
 

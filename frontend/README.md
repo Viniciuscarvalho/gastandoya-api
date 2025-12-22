@@ -98,3 +98,6 @@ Consulte o arquivo `DEPLOY_FRONTEND.md` na raiz do repositório para instruçõe
 - [Documentação TailwindCSS](https://tailwindcss.com/docs)
 - [Cloudflare Pages](https://pages.cloudflare.com/)
 
+
+
+

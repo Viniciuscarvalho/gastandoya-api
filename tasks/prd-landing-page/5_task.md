@@ -67,3 +67,6 @@ Seguir boas práticas de SEO e acessibilidade. Usar metadata API do Next.js.
 - `frontend/public/robots.txt`
 - `frontend/public/favicon.ico`
 
+
+
+

@@ -63,3 +63,6 @@ Seguir padrão visual definido na tarefa 2.0 e dados do PRD.
 - `frontend/src/components/FAQSection.tsx`
 - `frontend/src/content/faq.ts`
 
+
+
+

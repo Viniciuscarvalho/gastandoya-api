@@ -3,6 +3,7 @@ import { config } from '@/lib/config'
 import { getUserNotionConnectionStore } from '@/lib/userNotionConnectionStore'
 import { normalizeNotionId } from '@/lib/notionId'
 import { createNotionClient } from '@/lib/notionClient'
+import { NotionDatabaseDiscoveryService } from '@/lib/notionDatabaseDiscoveryService'
 
 // Força renderização dinâmica (necessário para headers e body)
 export const dynamic = 'force-dynamic'
@@ -19,6 +20,7 @@ export const dynamic = 'force-dynamic'
  * Body JSON:
  * {
  *   "databaseId": "abc123..." // ID do database de despesas no Notion
+ *   "pageId": "005ae70f..."   // (opcional) ID de uma página que contém um database inline
  * }
  * 
  * Respostas:
@@ -51,15 +53,14 @@ export async function POST(request: NextRequest) {
 
     // 3. Parse body
     const body = await request.json()
-    const { databaseId } = body
+    const { databaseId, pageId } = body
 
-    if (!databaseId || typeof databaseId !== 'string') {
-      return NextResponse.json(
-        { error: 'Invalid databaseId' },
-        { status: 400 }
-      )
+    const hasDatabaseId = typeof databaseId === 'string' && databaseId.trim().length > 0
+    const hasPageId = typeof pageId === 'string' && pageId.trim().length > 0
+
+    if (!hasDatabaseId && !hasPageId) {
+      return NextResponse.json({ error: 'Invalid request', message: 'Provide databaseId or pageId' }, { status: 400 })
     }
-    const normalizedDatabaseId = normalizeNotionId(databaseId)
 
     // 4. Buscar conexão existente
     const store = getUserNotionConnectionStore()
@@ -73,9 +74,48 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 5. Validar se o database realmente existe e é acessível pela integração
+    const notion = createNotionClient(connection.accessToken)
+
+    let normalizedDatabaseId: string | null = null
+
+    // 5. Resolver databaseId
+    if (hasDatabaseId) {
+      normalizedDatabaseId = normalizeNotionId(databaseId)
+    } else if (hasPageId) {
+      const discovery = new NotionDatabaseDiscoveryService()
+      const candidates = await discovery.findDatabasesInPageForUser(userId, pageId)
+
+      if (candidates.length === 0) {
+        return NextResponse.json(
+          {
+            error: 'Notion database not found in page',
+            message:
+              'Nenhum database foi encontrado dentro desta página. Verifique se o database está dentro da página e se a página/database foi compartilhada com a integração GastandoYa.',
+          },
+          { status: 400 },
+        )
+      }
+
+      if (candidates.length > 1) {
+        return NextResponse.json(
+          {
+            error: 'Multiple databases found in page',
+            message: 'Mais de um database foi encontrado dentro da página. Selecione qual deseja usar.',
+            databases: candidates,
+          },
+          { status: 409 },
+        )
+      }
+
+      normalizedDatabaseId = normalizeNotionId(candidates[0].id)
+    }
+
+    if (!normalizedDatabaseId) {
+      return NextResponse.json({ error: 'Failed to resolve databaseId' }, { status: 500 })
+    }
+
+    // 6. Validar se o database realmente existe e é acessível pela integração
     try {
-      const notion = createNotionClient(connection.accessToken)
       await notion.databases.retrieve({ database_id: normalizedDatabaseId })
     } catch (error: any) {
       console.error('❌ Failed to validate Notion database:', {
@@ -96,13 +136,10 @@ export async function POST(request: NextRequest) {
         )
       }
 
-      return NextResponse.json(
-        { error: 'Failed to validate Notion database' },
-        { status: 500 },
-      )
+      return NextResponse.json({ error: 'Failed to validate Notion database' }, { status: 500 })
     }
 
-    // 6. Atualizar com o databaseId validado
+    // 7. Atualizar com o databaseId validado
     await store.saveOrUpdate({
       ...connection,
       expensesDatabaseId: normalizedDatabaseId,
@@ -116,6 +153,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       message: 'Expenses database configured successfully',
+      databaseId: normalizedDatabaseId,
     })
   } catch (error: any) {
     console.error('Error configuring database:', error.message)
