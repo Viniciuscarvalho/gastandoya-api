@@ -305,3 +305,6 @@ Após deploy bem-sucedido:
 - [Next.js Static Export](https://nextjs.org/docs/app/guides/static-exports)
 - [Cloudflare DNS](https://developers.cloudflare.com/dns/)
 
+
+
+

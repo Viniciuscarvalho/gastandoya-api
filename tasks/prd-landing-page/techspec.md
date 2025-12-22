@@ -117,3 +117,6 @@ Fase 2 (se necessário):
 - `DEPLOY_FRONTEND.md` (guia Cloudflare Pages + DNS)
 
 
+
+
+

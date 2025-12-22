@@ -5,6 +5,7 @@ API backend para o app iOS GastandoYa, com integração ao Notion para leitura d
 ## 🚀 Funcionalidades
 
 - ✅ **OAuth com Notion**: Fluxo multi-tenant permitindo que cada usuário conecte sua própria conta Notion
+- ✅ **Database Discovery**: Descobre automaticamente databases dentro de páginas do Notion (Blocks API + Search API)
 - ✅ **Leitura de Despesas**: Consulta databases do Notion e retorna dados normalizados em `ExpenseDTO`
 - 🔒 **Segurança**: Validação via `x-api-key`, tokens armazenados com segurança, nunca expostos ao cliente
 
@@ -113,6 +114,55 @@ http://localhost:3000/notion/redirect?success=true&userId=test-user-1
 
 > 💡 **Nota**: No navegador desktop, verá "Safari cannot open the page" se o app iOS não estiver instalado. Isso é esperado! No iOS, o Safari mostrará um banner "Abrir em GastandoYa?".
 
+## 🔍 Database Discovery
+
+### Como funciona
+
+O GastandoYa agora descobre automaticamente databases do Notion, eliminando a necessidade de copiar IDs manualmente.
+
+### Métodos de descoberta
+
+1. **Via Blocks API (recomendado)**: 
+   - Usuário autoriza uma **página** que contém databases inline
+   - Backend varre os blocos da página e encontra todos os databases
+   - Suporta paginação para páginas grandes
+
+2. **Via Search API**:
+   - Busca databases por nome (ex: "GASTOS")
+   - Retorna todos os databases acessíveis pela integração
+
+### Exemplos de uso
+
+```bash
+# Listar databases em uma página
+curl "http://localhost:3000/api/notion/databases/list?pageId=abc123" \
+  -H "x-api-key: YOUR_KEY" \
+  -H "x-user-id: user-123"
+
+# Buscar databases por nome
+curl "http://localhost:3000/api/notion/databases/list?q=GASTOS" \
+  -H "x-api-key: YOUR_KEY" \
+  -H "x-user-id: user-123"
+
+# Configurar automaticamente (se houver 1 database)
+curl -X POST "http://localhost:3000/api/notion/config/database" \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: YOUR_KEY" \
+  -H "x-user-id: user-123" \
+  -d '{"pageId":"abc123"}'
+```
+
+### Fluxo no app iOS
+
+1. Usuário completa OAuth e autoriza uma **página**
+2. App chama `GET /api/notion/databases/list?pageId={id}`
+3. Casos:
+   - **1 database encontrado**: Configurar automaticamente
+   - **0 databases**: Pedir ao usuário para compartilhar página correta
+   - **>1 databases**: Mostrar lista para usuário escolher
+
+Consulte `TESTING.md` para exemplos completos e troubleshooting.
+
 ## 📁 Estrutura do Projeto
 
 ```
@@ -123,7 +173,13 @@ gastandoya-api/
 │   ├── api/
 │   │   └── notion/
 │   │       ├── expenses/
-│   │       │   └── route.ts          # GET /api/notion/expenses (TODO: Tarefa 3.0)
+│   │       │   └── route.ts          # ✅ GET /api/notion/expenses
+│   │       ├── databases/
+│   │       │   └── list/
+│   │       │       └── route.ts      # ✅ GET /api/notion/databases/list
+│   │       ├── config/
+│   │       │   └── database/
+│   │       │       └── route.ts      # ✅ POST /api/notion/config/database
 │   │       └── oauth/
 │   │           ├── authorize/
 │   │           │   └── route.ts      # ✅ Inicia OAuth
@@ -141,9 +197,14 @@ gastandoya-api/
 │   ├── userNotionConnectionStore.kv.ts # ✅ Implementação Vercel KV
 │   ├── userNotionConnectionStore.memory.ts # ✅ Implementação in-memory
 │   ├── notionClient.ts              # ✅ Client do Notion
-│   └── notionExpensesService.ts     # ✅ Serviço de despesas
+│   ├── notionExpensesService.ts     # ✅ Serviço de despesas
+│   └── notionDatabaseDiscoveryService.ts # ✅ Serviço de descoberta de databases
 ├── tasks/
-│   └── prd-notion-expenses/         # Documentação completa
+│   ├── prd-notion-expenses/         # Documentação completa
+│   │   ├── prd.md                   # Product Requirements Document
+│   │   ├── techspec.md              # Technical Specification
+│   │   └── tasks.md                 # Lista de tarefas
+│   └── prd-notion-database-discovery/ # Nova funcionalidade (Database Discovery)
 │       ├── prd.md                   # Product Requirements Document
 │       ├── techspec.md              # Technical Specification
 │       └── tasks.md                 # Lista de tarefas
@@ -163,12 +224,20 @@ Consulte a pasta `tasks/prd-notion-expenses/` para:
 
 ## 🔄 Status da Implementação
 
+### Notion Expenses (Core)
 - [x] **Tarefa 1.0**: OAuth com Notion e armazenamento de conexões
 - [x] **Tarefa 2.0**: Serviço de leitura de despesas no Notion
 - [x] **Tarefa 3.0**: Rota `GET /api/notion/expenses`
 - [x] **Tarefa 4.0**: Testes unitários e configuração de testes
 - [x] **Tarefa 5.0**: Documentação de deploy na Vercel
 - [x] **Deep Link iOS**: Redirecionamento automático após OAuth (`gastandoya://`)
+
+### Database Discovery (Nova funcionalidade)
+- [x] **Tarefa 1.0**: Descoberta automática via Blocks API
+- [x] **Tarefa 2.0**: Busca via Search API
+- [x] **Tarefa 3.0**: Endpoint `GET /api/notion/databases/list`
+- [x] **Tarefa 4.0**: Melhorar configuração com suporte a `pageId`
+- [x] **Tarefa 5.0**: Testes e documentação
 
 ## 📱 Integração com App iOS
 

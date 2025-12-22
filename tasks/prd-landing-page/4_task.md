@@ -57,3 +57,6 @@ Seguir padrão visual da landing e usar Clipboard API com fallback.
 ## Arquivos relevantes
 - `frontend/src/components/ContactSection.tsx`
 
+
+
+

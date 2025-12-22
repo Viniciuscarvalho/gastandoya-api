@@ -72,3 +72,6 @@ Seguir `tasks/prd-landing-page/techspec.md` e `prd.md` para lista de funcionalid
 - `frontend/src/components/FeatureSection.tsx`
 - `frontend/src/content/features.ts`
 
+
+
+

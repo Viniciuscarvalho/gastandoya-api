@@ -71,3 +71,6 @@ Seguir as definições em `tasks/prd-landing-page/techspec.md` (seções de Arqu
 - (a criar) `frontend/src/app/layout.tsx`
 - (a criar) `frontend/src/app/page.tsx`
 
+
+
+
