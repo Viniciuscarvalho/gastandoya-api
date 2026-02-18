@@ -14,11 +14,11 @@ export function FeatureSection() {
         <div className="text-center mb-20 max-w-3xl mx-auto">
           <span className="tag mb-6 inline-block">Funcionalidades</span>
           <h2 className="font-heading text-section mb-6">
-            Tudo que você precisa para{' '}
-            <span className="gradient-text">controlar suas finanças</span>
+            Funcionalidades para Controlar Gastos e{' '}
+            <span className="gradient-text">Organizar suas Financas</span>
           </h2>
           <p className="text-large text-neutral-400">
-            Funcionalidades pensadas para simplificar sua vida financeira
+            Tudo que voce precisa para simplificar sua vida financeira no iPhone
           </p>
         </div>
 

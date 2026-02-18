@@ -51,11 +51,11 @@ export function IntegrationsSection() {
         <div className="text-center mb-16 max-w-3xl mx-auto">
           <span className="tag mb-6 inline-block">Integrações</span>
           <h2 className="font-heading text-section mb-6">
-            Integrações que{' '}
-            <span className="gradient-text">simplificam sua vida</span>
+            Integre com iCloud, Notion e{' '}
+            <span className="gradient-text">Importe CSV/PDF</span>
           </h2>
           <p className="text-large text-neutral-400">
-            Conecte suas ferramentas favoritas e centralize suas finanças
+            Conecte suas ferramentas favoritas e centralize o controle financeiro
           </p>
         </div>
 
