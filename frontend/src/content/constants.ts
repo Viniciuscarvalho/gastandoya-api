@@ -1,0 +1,5 @@
+export const APP_STORE_URL = 'https://apps.apple.com/br/app/gastandoya/id6756076765'
+export const SITE_URL = 'https://www.gastandoya.com.br'
+export const SITE_NAME = 'GastandoYa'
+export const APP_ID = '6756076765'
+export const CONTACT_EMAIL = 'contato@gastandoya.com.br'

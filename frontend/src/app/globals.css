@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 /* ===== DESIGN SYSTEM ===== */
 :root {
@@ -460,4 +461,84 @@ body {
     rgba(16, 185, 129, 0.08),
     transparent 70%
   );
+}
+
+/* ===== BLOG PROSE OVERRIDES ===== */
+.prose-blog {
+  --tw-prose-body: #a3a3a3;
+  --tw-prose-headings: #fafafa;
+  --tw-prose-lead: #d4d4d4;
+  --tw-prose-links: #34d399;
+  --tw-prose-bold: #e5e5e5;
+  --tw-prose-counters: #737373;
+  --tw-prose-bullets: #10b981;
+  --tw-prose-hr: rgba(255, 255, 255, 0.08);
+  --tw-prose-quotes: #e5e5e5;
+  --tw-prose-quote-borders: #10b981;
+  --tw-prose-captions: #737373;
+  --tw-prose-code: #34d399;
+  --tw-prose-pre-code: #d4d4d4;
+  --tw-prose-pre-bg: rgba(17, 17, 17, 0.8);
+  --tw-prose-th-borders: rgba(255, 255, 255, 0.12);
+  --tw-prose-td-borders: rgba(255, 255, 255, 0.06);
+}
+
+.prose-blog img {
+  border-radius: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: var(--shadow-card);
+  max-width: 360px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.prose-blog a:not(.cta-link) {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.3s ease;
+}
+
+.prose-blog a:not(.cta-link):hover {
+  color: #6ee7b7;
+}
+
+.prose-blog .cta-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  padding: 1rem 2rem;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 1.125rem;
+  background: var(--gradient-primary);
+  background-size: 200% 200%;
+  color: var(--color-background);
+  text-decoration: none;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+
+.prose-blog .cta-link:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 32px rgba(16, 185, 129, 0.35);
+}
+
+.prose-blog h2 {
+  margin-top: 2.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.prose-blog ul,
+.prose-blog ol {
+  padding-left: 1.25rem;
+}
+
+.prose-blog li::marker {
+  color: #10b981;
+}
+
+/* ===== BACKGROUND SIZE UTILITY ===== */
+.background-size-200 {
+  background-size: 200% 200%;
 }
