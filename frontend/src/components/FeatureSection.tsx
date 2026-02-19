@@ -1,9 +1,13 @@
 'use client'
 
-import { features } from '@/content/features'
+import { getFeatures } from '@/content/features'
 import { PhoneMock } from './PhoneMock'
+import { useTranslation } from '@/i18n'
 
 export function FeatureSection() {
+  const { t, locale } = useTranslation()
+  const featureList = getFeatures(locale)
+
   return (
     <section id="funcionalidades" className="section-padding px-6 relative">
       {/* Background */}
@@ -12,19 +16,19 @@ export function FeatureSection() {
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Section Header */}
         <div className="text-center mb-20 max-w-3xl mx-auto">
-          <span className="tag mb-6 inline-block">Funcionalidades</span>
+          <span className="tag mb-6 inline-block">{t.features.tag}</span>
           <h2 className="font-heading text-section mb-6">
-            Funcionalidades para Controlar Gastos e{' '}
-            <span className="gradient-text">Organizar suas Financas</span>
+            {t.features.titleStart}
+            <span className="gradient-text">{t.features.titleHighlight}</span>
           </h2>
           <p className="text-large text-neutral-400">
-            Tudo que voce precisa para simplificar sua vida financeira no iPhone
+            {t.features.description}
           </p>
         </div>
 
         {/* Features */}
         <div className="space-y-32 lg:space-y-40">
-          {features.map((feature, index) => (
+          {featureList.map((feature, index) => (
             <div
               key={feature.id}
               className={`flex flex-col ${

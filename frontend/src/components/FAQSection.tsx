@@ -1,10 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import { faqItems } from '@/content/faq'
+import { getFaqItems } from '@/content/faq'
+import { useTranslation } from '@/i18n'
 
 export function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0)
+  const { t, locale } = useTranslation()
+  const items = getFaqItems(locale)
 
   const toggleItem = (index: number) => {
     setOpenIndex(openIndex === index ? null : index)
@@ -19,19 +22,19 @@ export function FAQSection() {
       <div className="max-w-3xl mx-auto relative z-10">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <span className="tag mb-6 inline-block">Dúvidas</span>
+          <span className="tag mb-6 inline-block">{t.faqSection.tag}</span>
           <h2 className="font-heading text-section mb-6">
-            Perguntas{' '}
-            <span className="gradient-text">Frequentes</span>
+            {t.faqSection.titleStart}
+            <span className="gradient-text">{t.faqSection.titleHighlight}</span>
           </h2>
           <p className="text-large text-neutral-400">
-            Tire suas dúvidas sobre o GastandoYa
+            {t.faqSection.description}
           </p>
         </div>
 
         {/* FAQ Items */}
         <div className="space-y-3">
-          {faqItems.map((item, index) => (
+          {items.map((item, index) => (
             <div
               key={index}
               className="group"
@@ -94,13 +97,13 @@ export function FAQSection() {
         {/* Additional Help */}
         <div className="mt-12 text-center">
           <p className="text-neutral-500 mb-4">
-            Não encontrou o que procurava?
+            {t.faqSection.notFound}
           </p>
           <a
             href="#contato"
             className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 font-medium transition-colors"
           >
-            <span>Entre em contato conosco</span>
+            <span>{t.faqSection.contactUs}</span>
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>

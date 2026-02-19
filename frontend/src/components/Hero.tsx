@@ -3,8 +3,11 @@
 import Image from 'next/image'
 import { PhoneMock } from './PhoneMock'
 import { APP_STORE_URL } from '@/content/constants'
+import { useTranslation } from '@/i18n'
 
 export function Hero() {
+  const { t } = useTranslation()
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-24 pb-16 px-6">
       {/* Background Effects */}
@@ -23,23 +26,22 @@ export function Hero() {
             <div className="animate-fade-in">
               <span className="tag inline-flex items-center gap-2 mb-8">
                 <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-                App iOS de Finanças Pessoais
+                {t.hero.badge}
               </span>
             </div>
 
             {/* Headline */}
             <h1 className="font-display text-hero mb-6 animate-fade-in delay-100">
-              Controle seus Gastos e{' '}
-              <span className="gradient-text">Finanças Pessoais</span>
-              {' '}no iPhone
+              {t.hero.titleStart}
+              <span className="gradient-text">{t.hero.titleHighlight}</span>
+              {t.hero.titleEnd}
             </h1>
 
             {/* Description */}
             <p className="text-large text-neutral-400 max-w-xl mx-auto lg:mx-0 mb-10 animate-fade-in delay-200 leading-relaxed">
-              Planeje gastos mensais, crie metas financeiras e sincronize via iCloud.
-              Integre com Notion, importe CSV/PDF e mantenha sua{' '}
-              <span className="text-neutral-200">privacidade total</span> — seus dados
-              nunca saem do seu dispositivo.
+              {t.hero.description}
+              <span className="text-neutral-200">{t.hero.descriptionHighlight}</span>
+              {t.hero.descriptionEnd}
             </p>
 
             {/* CTAs */}
@@ -53,13 +55,13 @@ export function Hero() {
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 21.99 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.1 21.99C7.79 22.03 6.8 20.68 5.96 19.47C4.25 16.97 2.94 12.45 4.7 9.39C5.57 7.87 7.13 6.91 8.82 6.88C10.1 6.86 11.32 7.75 12.11 7.75C12.89 7.75 14.37 6.68 15.92 6.84C16.57 6.87 18.39 7.1 19.56 8.82C19.47 8.88 17.39 10.1 17.41 12.63C17.44 15.65 20.06 16.66 20.09 16.67C20.06 16.74 19.67 18.11 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z"/>
                 </svg>
-                Baixar Gratis na App Store
+                {t.hero.ctaPrimary}
               </a>
               <a
                 href="#funcionalidades"
                 className="w-full sm:w-auto btn-secondary px-8 py-4 rounded-full text-lg"
               >
-                Conheca o App
+                {t.hero.ctaSecondary}
               </a>
             </div>
 
@@ -68,15 +70,15 @@ export function Hero() {
               <div className="flex flex-wrap justify-center lg:justify-start gap-8">
                 <div>
                   <div className="text-2xl font-bold gradient-text">100%</div>
-                  <div className="text-sm text-neutral-500">Privacidade</div>
+                  <div className="text-sm text-neutral-500">{t.hero.statPrivacy}</div>
                 </div>
                 <div>
                   <div className="text-2xl font-bold gradient-text">iCloud</div>
-                  <div className="text-sm text-neutral-500">Sincronização</div>
+                  <div className="text-sm text-neutral-500">{t.hero.statSync}</div>
                 </div>
                 <div>
                   <div className="text-2xl font-bold gradient-text">iOS</div>
-                  <div className="text-sm text-neutral-500">Nativo</div>
+                  <div className="text-sm text-neutral-500">{t.hero.statNative}</div>
                 </div>
               </div>
             </div>
@@ -92,7 +94,7 @@ export function Hero() {
               <div className="relative animate-float">
                 <PhoneMock
                   imageSrc="/screens/screen-1.png"
-                  alt="GastandoYa - App de controle de gastos e finanças pessoais para iPhone"
+                  alt={t.hero.phoneAlt}
                 />
               </div>
 
@@ -104,8 +106,8 @@ export function Hero() {
                   </svg>
                 </div>
                 <div>
-                  <div className="text-sm font-semibold">+ R$ 150,00</div>
-                  <div className="text-xs text-neutral-500">Entrada</div>
+                  <div className="text-sm font-semibold">{t.hero.floatingIncome}</div>
+                  <div className="text-xs text-neutral-500">{t.hero.floatingIncomeLabel}</div>
                 </div>
               </div>
 
@@ -116,8 +118,8 @@ export function Hero() {
                   </svg>
                 </div>
                 <div>
-                  <div className="text-sm font-semibold">Meta atingida</div>
-                  <div className="text-xs text-neutral-500">Viagem</div>
+                  <div className="text-sm font-semibold">{t.hero.floatingGoal}</div>
+                  <div className="text-xs text-neutral-500">{t.hero.floatingGoalLabel}</div>
                 </div>
               </div>
             </div>

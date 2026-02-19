@@ -3,10 +3,13 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { APP_STORE_URL } from '@/content/constants'
+import { useTranslation } from '@/i18n'
+import { LanguageToggle } from './LanguageToggle'
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const { t } = useTranslation()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,10 +20,10 @@ export function Header() {
   }, [])
 
   const navLinks = [
-    { href: '#funcionalidades', label: 'Funcionalidades' },
-    { href: '#premium', label: 'Premium' },
-    { href: '#faq', label: 'FAQ' },
-    { href: '/blog/', label: 'Blog' },
+    { href: '#funcionalidades', label: t.header.features },
+    { href: '#premium', label: t.header.premium },
+    { href: '#faq', label: t.header.faq },
+    { href: '/blog/', label: t.header.blog },
   ]
 
   return (
@@ -37,7 +40,7 @@ export function Header() {
           <div className="relative w-11 h-11 rounded-xl overflow-hidden ring-2 ring-emerald-500/20 group-hover:ring-emerald-500/40 transition-all duration-300 group-hover:scale-105">
             <Image
               src="/og-image.png"
-              alt="GastandoYa - App de Controle de Gastos para iPhone"
+              alt="GastandoYa"
               fill
               className="object-cover"
               priority
@@ -48,7 +51,7 @@ export function Header() {
               Gastando<span className="gradient-text">Ya</span>
             </span>
             <span className="text-[10px] text-neutral-500 font-medium tracking-wider uppercase hidden sm:block">
-              Finanças Pessoais
+              {t.header.subtitle}
             </span>
           </div>
         </a>
@@ -66,8 +69,9 @@ export function Header() {
           ))}
         </nav>
 
-        {/* CTA Button */}
-        <div className="flex items-center gap-4">
+        {/* Right side: Language Toggle + CTA */}
+        <div className="flex items-center gap-3">
+          <LanguageToggle />
           <a
             href={APP_STORE_URL}
             target="_blank"
@@ -77,7 +81,7 @@ export function Header() {
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
               <path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 21.99 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.1 21.99C7.79 22.03 6.8 20.68 5.96 19.47C4.25 16.97 2.94 12.45 4.7 9.39C5.57 7.87 7.13 6.91 8.82 6.88C10.1 6.86 11.32 7.75 12.11 7.75C12.89 7.75 14.37 6.68 15.92 6.84C16.57 6.87 18.39 7.1 19.56 8.82C19.47 8.88 17.39 10.1 17.41 12.63C17.44 15.65 20.06 16.66 20.09 16.67C20.06 16.74 19.67 18.11 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z"/>
             </svg>
-            App Store
+            {t.header.appStore}
           </a>
 
           {/* Mobile Menu Button */}
@@ -87,21 +91,9 @@ export function Header() {
             aria-label="Menu"
           >
             <div className="flex flex-col gap-1.5">
-              <span
-                className={`w-5 h-0.5 bg-white rounded-full transition-all duration-300 ${
-                  isMobileMenuOpen ? 'rotate-45 translate-y-2' : ''
-                }`}
-              />
-              <span
-                className={`w-5 h-0.5 bg-white rounded-full transition-all duration-300 ${
-                  isMobileMenuOpen ? 'opacity-0' : ''
-                }`}
-              />
-              <span
-                className={`w-5 h-0.5 bg-white rounded-full transition-all duration-300 ${
-                  isMobileMenuOpen ? '-rotate-45 -translate-y-2' : ''
-                }`}
-              />
+              <span className={`w-5 h-0.5 bg-white rounded-full transition-all duration-300 ${isMobileMenuOpen ? 'rotate-45 translate-y-2' : ''}`} />
+              <span className={`w-5 h-0.5 bg-white rounded-full transition-all duration-300 ${isMobileMenuOpen ? 'opacity-0' : ''}`} />
+              <span className={`w-5 h-0.5 bg-white rounded-full transition-all duration-300 ${isMobileMenuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
             </div>
           </button>
         </div>
@@ -110,9 +102,7 @@ export function Header() {
       {/* Mobile Menu */}
       <div
         className={`md:hidden absolute top-full left-0 right-0 glass-card transition-all duration-300 ${
-          isMobileMenuOpen
-            ? 'opacity-100 translate-y-0'
-            : 'opacity-0 -translate-y-4 pointer-events-none'
+          isMobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'
         }`}
       >
         <nav className="flex flex-col p-6 gap-2">
@@ -136,7 +126,7 @@ export function Header() {
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
               <path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 21.99 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.1 21.99C7.79 22.03 6.8 20.68 5.96 19.47C4.25 16.97 2.94 12.45 4.7 9.39C5.57 7.87 7.13 6.91 8.82 6.88C10.1 6.86 11.32 7.75 12.11 7.75C12.89 7.75 14.37 6.68 15.92 6.84C16.57 6.87 18.39 7.1 19.56 8.82C19.47 8.88 17.39 10.1 17.41 12.63C17.44 15.65 20.06 16.66 20.09 16.67C20.06 16.74 19.67 18.11 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z"/>
             </svg>
-            Baixar na App Store
+            {t.header.downloadAppStore}
           </a>
         </nav>
       </div>
