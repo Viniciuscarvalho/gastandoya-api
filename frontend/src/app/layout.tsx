@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
+import { LanguageProvider } from '@/i18n'
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -98,7 +99,9 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased bg-noise">
-        {children}
+        <LanguageProvider>
+          {children}
+        </LanguageProvider>
       </body>
     </html>
   )
