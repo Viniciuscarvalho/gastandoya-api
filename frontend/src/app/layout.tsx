@@ -15,20 +15,20 @@ export const metadata: Metadata = {
     default: 'GastandoYa - App de Controle de Gastos para iPhone',
     template: '%s | GastandoYa',
   },
-  description: 'App iOS de controle de gastos e financas pessoais. Planeje gastos mensais, crie metas financeiras, sincronize via iCloud, integre com Notion e importe CSV/PDF. 100% privacidade — seus dados nunca saem do dispositivo.',
+  description: 'App iOS de controle de gastos e finanças pessoais. Planeje gastos mensais, crie metas financeiras, sincronize via iCloud, integre com Notion e importe CSV/PDF. 100% privacidade — seus dados nunca saem do dispositivo.',
   keywords: [
     'controle de gastos',
-    'financas pessoais',
-    'app financas iPhone',
+    'finanças pessoais',
+    'app finanças iPhone',
     'controle financeiro iOS',
     'gastos mensais',
     'metas financeiras',
     'app despesas',
-    'orcamento pessoal',
-    'iCloud financas',
-    'Notion financas',
+    'orçamento pessoal',
+    'iCloud finanças',
+    'Notion finanças',
     'importar CSV gastos',
-    'app financas privacidade',
+    'app finanças privacidade',
   ],
   authors: [{ name: 'GastandoYa' }],
   creator: 'GastandoYa',
@@ -53,13 +53,13 @@ export const metadata: Metadata = {
     url: 'https://www.gastandoya.com.br',
     siteName: 'GastandoYa',
     title: 'GastandoYa - App de Controle de Gastos para iPhone',
-    description: 'App iOS de controle de gastos e financas pessoais. Sincronize via iCloud, integre com Notion e mantenha total privacidade.',
+    description: 'App iOS de controle de gastos e finanças pessoais. Sincronize via iCloud, integre com Notion e mantenha total privacidade.',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'GastandoYa - App de Controle de Gastos e Financas Pessoais para iPhone',
+        alt: 'GastandoYa - App de Controle de Gastos e Finanças Pessoais para iPhone',
       },
     ],
   },
@@ -85,7 +85,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

@@ -17,7 +17,7 @@ export default function Home() {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
     name: 'GastandoYa',
-    description: 'App iOS de controle de gastos e financas pessoais. Planeje gastos mensais, crie metas financeiras, sincronize via iCloud e integre com Notion.',
+    description: 'App iOS de controle de gastos e finanças pessoais. Planeje gastos mensais, crie metas financeiras, sincronize via iCloud e integre com Notion.',
     operatingSystem: 'iOS',
     applicationCategory: 'FinanceApplication',
     offers: {
@@ -28,10 +28,10 @@ export default function Home() {
     featureList: [
       'Controle de gastos por categoria',
       'Metas financeiras com progresso visual',
-      'Sincronizacao via iCloud',
-      'Integracao com Notion',
-      'Importacao de CSV e PDF',
-      'Relatorios em PDF',
+      'Sincronização via iCloud',
+      'Integração com Notion',
+      'Importação de CSV e PDF',
+      'Relatórios em PDF',
       'Multi-moeda com taxas atualizadas',
       'Regras inteligentes de alertas',
     ],

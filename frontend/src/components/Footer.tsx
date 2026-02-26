@@ -112,7 +112,7 @@ export function Footer() {
 
         {/* Bottom */}
         <div className="pt-8 border-t border-neutral-900 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-neutral-600">
+          <p className="text-sm text-neutral-600" suppressHydrationWarning>
             &copy; {currentYear} GastandoYa. {t.footer.allRights}
           </p>
 

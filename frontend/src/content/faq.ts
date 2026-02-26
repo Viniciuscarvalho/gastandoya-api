@@ -7,32 +7,32 @@ export interface FAQItem {
 
 const faqItemsPtBR: FAQItem[] = [
   {
-    question: 'O que e o GastandoYa?',
-    answer: 'GastandoYa e um aplicativo iOS para controle de financas pessoais. Ele permite registrar despesas, analisar gastos por categoria, criar metas financeiras e manter seus dados sincronizados entre dispositivos.',
+    question: 'O que é o GastandoYa?',
+    answer: 'GastandoYa é um aplicativo iOS para controle de finanças pessoais. Ele permite registrar despesas, analisar gastos por categoria, criar metas financeiras e manter seus dados sincronizados entre dispositivos.',
   },
   {
-    question: 'O app e gratuito?',
-    answer: 'O app oferece funcionalidades basicas gratuitamente. Recursos avancados como importacao/exportacao de dados, integracao com Notion, relatorios em PDF e sincronizacao via iCloud estao disponiveis na versao Premium.',
+    question: 'O app é gratuito?',
+    answer: 'O app oferece funcionalidades básicas gratuitamente. Recursos avançados como importação/exportação de dados, integração com Notion, relatórios em PDF e sincronização via iCloud estão disponíveis na versão Premium.',
   },
   {
-    question: 'Como funciona a integracao com Notion?',
-    answer: 'Voce pode conectar sua conta do Notion ao GastandoYa para importar transacoes de databases existentes. Basta autorizar o acesso e selecionar o database que contem seus dados financeiros.',
+    question: 'Como funciona a integração com Notion?',
+    answer: 'Você pode conectar sua conta do Notion ao GastandoYa para importar transações de databases existentes. Basta autorizar o acesso e selecionar o database que contém seus dados financeiros.',
   },
   {
-    question: 'Meus dados estao seguros?',
-    answer: 'Sim! Seus dados sao armazenados localmente no seu dispositivo e, opcionalmente, sincronizados via iCloud de forma criptografada. Nao acessamos nem armazenamos suas informacoes financeiras em nossos servidores.',
+    question: 'Meus dados estão seguros?',
+    answer: 'Sim! Seus dados são armazenados localmente no seu dispositivo e, opcionalmente, sincronizados via iCloud de forma criptografada. Não acessamos nem armazenamos suas informações financeiras em nossos servidores.',
   },
   {
     question: 'Posso usar em mais de um dispositivo?',
-    answer: 'Sim, com a sincronizacao via iCloud (recurso Premium), seus dados ficam disponiveis em todos os seus dispositivos Apple logados na mesma conta.',
+    answer: 'Sim, com a sincronização via iCloud (recurso Premium), seus dados ficam disponíveis em todos os seus dispositivos Apple logados na mesma conta.',
   },
   {
     question: 'Quais formatos de arquivo posso importar?',
-    answer: 'O GastandoYa suporta importacao de arquivos CSV e PDF. O arquivo deve conter colunas para nome/descricao, data, valor e categoria. Diversos formatos de data sao aceitos.',
+    answer: 'O GastandoYa suporta importação de arquivos CSV e PDF. O arquivo deve conter colunas para nome/descrição, data, valor e categoria. Diversos formatos de data são aceitos.',
   },
   {
     question: 'Como entro em contato com o suporte?',
-    answer: 'Voce pode nos enviar um e-mail para contato@gastandoya.com.br. Responderemos o mais rapido possivel!',
+    answer: 'Você pode nos enviar um e-mail para contato@gastandoya.com.br. Responderemos o mais rápido possível!',
   },
 ]
 

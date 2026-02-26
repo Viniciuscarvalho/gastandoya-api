@@ -101,9 +101,10 @@ export function Header() {
 
       {/* Mobile Menu */}
       <div
-        className={`md:hidden absolute top-full left-0 right-0 glass-card transition-all duration-300 ${
+        className={`md:hidden absolute top-full left-0 right-0 transition-all duration-300 border-b border-white/8 ${
           isMobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'
         }`}
+        style={{ background: '#0a0a0a', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)' }}
       >
         <nav className="flex flex-col p-6 gap-2">
           {navLinks.map((link) => (
