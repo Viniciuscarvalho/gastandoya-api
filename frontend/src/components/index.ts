@@ -1,8 +1,11 @@
 export { Header } from './Header'
 export { Hero } from './Hero'
 export { PhoneMock } from './PhoneMock'
+export { SocialProofSection } from './SocialProofSection'
+export { WhySection } from './WhySection'
 export { FeatureSection } from './FeatureSection'
 export { IntegrationsSection } from './IntegrationsSection'
+export { ComparisonSection } from './ComparisonSection'
 export { PremiumSection } from './PremiumSection'
 export { FAQSection } from './FAQSection'
 export { ContactSection } from './ContactSection'
@@ -11,7 +14,3 @@ export { JsonLd } from './JsonLd'
 export { LanguageToggle } from './LanguageToggle'
 export { BlogListingContent } from './BlogListingContent'
 export { BlogPostContent } from './BlogPostContent'
-
-
-
-

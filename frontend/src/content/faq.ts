@@ -7,20 +7,24 @@ export interface FAQItem {
 
 const faqItemsPtBR: FAQItem[] = [
   {
+    question: 'Preciso pagar pra usar?',
+    answer: 'Não! O GastandoYa é gratuito para funcionalidades básicas como registrar gastos, ver estatísticas e criar metas. Recursos avançados como importação de CSV/PDF, integração com Notion, relatórios em PDF e sincronização via iCloud estão disponíveis na versão Premium.',
+  },
+  {
+    question: 'É seguro? Onde ficam meus dados?',
+    answer: 'Seus dados são armazenados localmente no seu dispositivo e, opcionalmente, sincronizados via iCloud de forma criptografada. Não temos servidores — suas informações financeiras nunca passam por nós. É o modelo mais seguro possível.',
+  },
+  {
+    question: 'E se eu já uso o Notion pra finanças?',
+    answer: 'Perfeito! O GastandoYa é o único app financeiro com integração nativa com Notion. Você pode importar transações direto de databases existentes, mantendo tudo sincronizado onde você já organiza sua vida.',
+  },
+  {
     question: 'O que é o GastandoYa?',
-    answer: 'GastandoYa é um aplicativo iOS para controle de finanças pessoais. Ele permite registrar despesas, analisar gastos por categoria, criar metas financeiras e manter seus dados sincronizados entre dispositivos.',
+    answer: 'GastandoYa é um aplicativo iOS para controle de finanças pessoais. Ele permite registrar despesas, analisar gastos por categoria, criar metas financeiras e manter seus dados sincronizados entre dispositivos — tudo com design nativo e privacidade total.',
   },
   {
-    question: 'O app é gratuito?',
-    answer: 'O app oferece funcionalidades básicas gratuitamente. Recursos avançados como importação/exportação de dados, integração com Notion, relatórios em PDF e sincronização via iCloud estão disponíveis na versão Premium.',
-  },
-  {
-    question: 'Como funciona a integração com Notion?',
-    answer: 'Você pode conectar sua conta do Notion ao GastandoYa para importar transações de databases existentes. Basta autorizar o acesso e selecionar o database que contém seus dados financeiros.',
-  },
-  {
-    question: 'Meus dados estão seguros?',
-    answer: 'Sim! Seus dados são armazenados localmente no seu dispositivo e, opcionalmente, sincronizados via iCloud de forma criptografada. Não acessamos nem armazenamos suas informações financeiras em nossos servidores.',
+    question: 'Preciso conectar minha conta bancária?',
+    answer: 'Não! O GastandoYa não pede acesso ao seu banco. Você registra os gastos manualmente ou importa extratos via CSV/PDF. É mais seguro e te dá mais consciência sobre cada gasto.',
   },
   {
     question: 'Posso usar em mais de um dispositivo?',
@@ -28,7 +32,11 @@ const faqItemsPtBR: FAQItem[] = [
   },
   {
     question: 'Quais formatos de arquivo posso importar?',
-    answer: 'O GastandoYa suporta importação de arquivos CSV e PDF. O arquivo deve conter colunas para nome/descrição, data, valor e categoria. Diversos formatos de data são aceitos.',
+    answer: 'O GastandoYa suporta importação de arquivos CSV e PDF. O arquivo deve conter colunas para nome/descrição, data, valor e categoria. Diversos formatos de data são aceitos e o mapeamento é automático.',
+  },
+  {
+    question: 'O app funciona offline?',
+    answer: 'Sim! Como seus dados ficam no dispositivo, o app funciona 100% offline. A conexão com internet só é necessária para sincronizar via iCloud ou importar do Notion.',
   },
   {
     question: 'Como entro em contato com o suporte?',
@@ -38,20 +46,24 @@ const faqItemsPtBR: FAQItem[] = [
 
 const faqItemsEnUS: FAQItem[] = [
   {
+    question: 'Do I need to pay to use it?',
+    answer: 'No! GastandoYa is free for basic features like logging expenses, viewing statistics and creating goals. Advanced features like CSV/PDF import, Notion integration, PDF reports and iCloud sync are available in the Premium version.',
+  },
+  {
+    question: 'Is it secure? Where is my data stored?',
+    answer: 'Your data is stored locally on your device and optionally synced via iCloud with encryption. We have no servers — your financial information never passes through us. It\'s the most secure model possible.',
+  },
+  {
+    question: 'What if I already use Notion for finances?',
+    answer: 'Perfect! GastandoYa is the only finance app with native Notion integration. You can import transactions directly from existing databases, keeping everything synced where you already organize your life.',
+  },
+  {
     question: 'What is GastandoYa?',
-    answer: 'GastandoYa is an iOS app for personal finance management. It lets you track expenses, analyze spending by category, create financial goals and keep your data synced across devices.',
+    answer: 'GastandoYa is an iOS app for personal finance management. It lets you track expenses, analyze spending by category, create financial goals and keep your data synced across devices — all with native design and total privacy.',
   },
   {
-    question: 'Is the app free?',
-    answer: 'The app offers basic features for free. Advanced features like data import/export, Notion integration, PDF reports and iCloud sync are available in the Premium version.',
-  },
-  {
-    question: 'How does the Notion integration work?',
-    answer: 'You can connect your Notion account to GastandoYa to import transactions from existing databases. Simply authorize access and select the database containing your financial data.',
-  },
-  {
-    question: 'Is my data secure?',
-    answer: 'Yes! Your data is stored locally on your device and optionally synced via iCloud with encryption. We never access or store your financial information on our servers.',
+    question: 'Do I need to connect my bank account?',
+    answer: 'No! GastandoYa doesn\'t ask for bank access. You log expenses manually or import statements via CSV/PDF. It\'s more secure and gives you more awareness of every expense.',
   },
   {
     question: 'Can I use it on multiple devices?',
@@ -59,7 +71,11 @@ const faqItemsEnUS: FAQItem[] = [
   },
   {
     question: 'What file formats can I import?',
-    answer: 'GastandoYa supports importing CSV and PDF files. The file should contain columns for name/description, date, amount and category. Various date formats are accepted.',
+    answer: 'GastandoYa supports importing CSV and PDF files. The file should contain columns for name/description, date, amount and category. Various date formats are accepted and mapping is automatic.',
+  },
+  {
+    question: 'Does the app work offline?',
+    answer: 'Yes! Since your data is stored on-device, the app works 100% offline. Internet connection is only needed to sync via iCloud or import from Notion.',
   },
   {
     question: 'How do I contact support?',

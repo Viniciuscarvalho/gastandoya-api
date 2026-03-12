@@ -1,8 +1,11 @@
 import {
   Header,
   Hero,
+  SocialProofSection,
+  WhySection,
   FeatureSection,
   IntegrationsSection,
+  ComparisonSection,
   PremiumSection,
   FAQSection,
   ContactSection,
@@ -79,8 +82,11 @@ export default function Home() {
       <Header />
       <main>
         <Hero />
+        <SocialProofSection />
+        <WhySection />
         <FeatureSection />
         <IntegrationsSection />
+        <ComparisonSection />
         <PremiumSection />
         <FAQSection />
         <ContactSection />
